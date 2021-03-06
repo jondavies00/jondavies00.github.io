@@ -49,6 +49,19 @@ body {
     color: black;
 }
 
+/* Content styles */
+.text-wrapper {
+    width: 300px;
+    border: 15px solid rgb(37, 31, 35);
+    padding: 38px;
+    margin: 10px;
+    position: center;
+}
+
+.about-wrapper {
+
+}
+
 /* Portfolio Styles */
 
 .portfolio-items-wrapper{
@@ -61,8 +74,8 @@ body {
 }
 
 .portfolio-img-background {
-    height: 300px;
-    width: 70%;
+    height: 100px;
+    width: auto;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
