@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 38px; /* Moves stuff inwards -> creates border */
-    border-bottom: 5px solid rgb(37, 31, 35);
+    border-bottom: 3px solid rgb(37, 31, 35);
 }
 
 .left-side {
@@ -40,7 +40,7 @@ body {
 
 .nav-link-wrapper a {
     color: black;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
     text-decoration: none;
     transition: color 0.5s;
 }
@@ -57,8 +57,8 @@ body {
 /* Content styles */
 
 .brand {
-    font-family: Arial, Helvetica, sans-serif
-    
+    font-family: "Lato",Arial, Helvetica, sans-serif;
+    font-weight: bold;
 }
 /* 
 .text-wrapper {
@@ -76,14 +76,19 @@ body {
     text-align: left;
     width: 1000px;
     height: 1000px;
-    border-left: 5px solid rgb(37, 31, 35);
-    border-right: 5px solid rgb(37, 31, 35);
+    border-left: 3px solid rgb(37, 31, 35);
+    border-right: 3px solid rgb(37, 31, 35);
     padding: 38px;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
     position: center;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Lato", Arial, Helvetica, sans-serif;
+
+}
+
+a {
+    color: rgb(0, 102, 255);
 }
 
 /* Portfolio Styles */
