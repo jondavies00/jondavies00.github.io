@@ -2,7 +2,7 @@
 
 body {
     margin: 0px; /* Margin has a value of 8px by default */
-    background-color: grey;
+    background-color: rgb(255, 255, 255);
 }
 
 .container {
@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 38px; /* Moves stuff inwards -> creates border */
-    border-bottom: 3px solid rgb(37, 31, 35);
+    border-bottom: 1px solid rgb(190, 188, 189);
 }
 
 .left-side {
@@ -29,30 +29,28 @@ body {
     margin-right: 20px;
     font-size: 0.9em;
     text-transform: uppercase;
-    color: white;
 }
 
 .nav-link-wrapper {
     height: 22px;
-    border-bottom: 1px solid transparent;
+
     transition: border-bottom 0.5s; 
 }
 
 .nav-link-wrapper a {
-    color: black;
+    color: rgb(172, 172, 172);
     font-family: Helvetica, Arial, sans-serif;
     text-decoration: none;
     transition: color 0.5s;
 }
 
 .nav-link-wrapper:hover { /* called pseudo-state, can tell css we want something to happen on 'hover'*/ 
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 .nav-link-wrapper a:hover { /* called pseudo-state, can tell css we want something to happen on 'hover'*/ 
-    color: white;
+    color: rgb(0, 0, 0);
 }
-
 
 /* Content styles */
 
@@ -76,8 +74,8 @@ body {
     text-align: left;
     width: 1000px;
     height: 1000px;
-    border-left: 3px solid rgb(37, 31, 35);
-    border-right: 3px solid rgb(37, 31, 35);
+    border-left: 1px solid rgb(190, 188, 189);
+    border-right: 1px solid rgb(190, 188, 189);
     padding: 38px;
     margin-left: auto;
     margin-right: auto;
@@ -103,7 +101,7 @@ a {
 }
 
 .portfolio-img-background {
-    height: 100px;
+    height: 500px;
     width: auto;
     background-size: cover;
     background-position: center;

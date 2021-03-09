@@ -2,8 +2,89 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>SYS2</title>
+    <title>INT2</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/icon.png">
 </head>
+<body>
+    <div class="container"> <!-- divs can be used to apply styles (in css) to sections of code-->
+        <div class="nav-wrapper">
+            <div class="left-side">
+                <div class="nav-link-wrapper">
+                    <a href="index.html">Home</a>
+                   
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="about.html">About</a>
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="cs_degree.html">CS Degree Stuff</a>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="brand">
+                    <div> JONATHAN DAVIES</div> <!-- By themselves, div's only function is a line break-->
+                </div>
+            </div>
+        </div>
+        <div class="content-wrapper">
+            <div class="text-wrapper">
+                <div class="sys2-header">
+                    <h1>Intelligent Systems 2</h1>
+                    <h2>Credits: 10</h2>
+                    <h3><a href="https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/COM00024I/2020-21"> Module Description</a></h3>
+                </div>
+                <div class="sys2-topics-wrapper">
+                    <h3>Topics:</h3>
+                    <div class="list-of-topics">
+                        <ul>
+                            <li>Numpy</li>
+                            <li>Linear algebra</li>
+                            <li>Machine Learning as an optimisation problem</li>
+
+                        </ul>
+                    </div>
+                    <div class ="numpy">
+                        <h3>Numpy</h3>
+                        <p>Numpy is a useful module in python that allows the use of a wide variety of mathematical functions. 
+                            For machine learning, the method <i>numpy.array()</i> is very useful, as we can instantiate matrices
+                            with it. To do matrix operations, there are methods such as <i>numpy.dot()</i>, which allows us to 
+                            compute the dot product of two matrices.
+                        </p>
+                    </div>
+                    
+                    <div class ="linear-algebra">
+                        <h3>Linear algebra</h3>
+                        <p> Lineara lgebra is used extensively on this course. Here are some useful resources:
+                            
+                        </p>
+                    </div>
+                    <div class = "machine-learning-op">
+                        <h3>Machine Learning as an optimisation problem</h3>
+                        <p>
+                        If we use optimisation to find good classification values in linear regression, it's difficult to obtain a level of certainty. 
+                        This is because the linear loss function that gives values of either 1 or 0 is not helpful when data is not linearly seperable.
+                        When data is not linearly seperable, we could have two classifiers that misclassify the same number of values, but one is 
+                        better than the other. When we use optimisation to find a good model, it will be very difficult to find them as two similar models
+                        will not be close to each other on the graph of loss functions. 
+                        </p>
+                        <p>
+                        Instead, we can use linear logistic regression (LLC), or just logistic regression for short. This is a classification algorithmm that
+                        gives a probability for a loss function, instead of a binary 1 or 0. Therefore, better models will have a higher probability of being
+                        useful. This uses a sigmoid function instead of a sign function. In prediction, we will predict +1 if the sigmoid function of our
+                        theta(s) and theta 0 is above some threshold value e.g. 0.5
+                        </p>
+                        <p>
+                        To train this data, we need to use a new loss function. This is called the <b>negative log likelihood loss function</b>. 
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
