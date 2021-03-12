@@ -9,6 +9,7 @@
     <link rel="icon" href="images/icon.png">
 </head>
 <body>
+    <!-- Top navbar -->
     <div class="container"> <!-- divs can be used to apply styles (in css) to sections of code-->
         <div class="nav-wrapper">
             <div class="left-side">
@@ -29,7 +30,14 @@
                 </div>
             </div>
         </div>
+        <!-- Side navigation -->
+
         <div class="content-wrapper">
+            <div class="sidenav">
+                <a href="#np">Numpy</a>
+                <a href="#la">Linear algebra</a>
+                <a href="#ml">Machine Learning as an optimisation problem</a>
+            </div>
             <div class="text-wrapper">
                 <div class="sys2-header">
                     <h1>Intelligent Systems 2</h1>
@@ -47,7 +55,7 @@
                         </ul>
                     </div>
                     <div class ="numpy">
-                        <h3>Numpy</h3>
+                        <h3 id="np">Numpy</h3>
                         <p>Numpy is a useful module in python that allows the use of a wide variety of mathematical functions. 
                             For machine learning, the method <i>numpy.array()</i> is very useful, as we can instantiate matrices
                             with it. To do matrix operations, there are methods such as <i>numpy.dot()</i>, which allows us to 
@@ -56,13 +64,13 @@
                     </div>
                     
                     <div class ="linear-algebra">
-                        <h3>Linear algebra</h3>
+                        <h3 id="la">Linear algebra</h3>
                         <p> Lineara lgebra is used extensively on this course. Here are some useful resources:
                             
                         </p>
                     </div>
                     <div class = "machine-learning-op">
-                        <h3>Machine Learning as an optimisation problem</h3>
+                        <h3 id="ml">Machine Learning as an optimisation problem</h3>
                         <p>
                         If we use optimisation to find good classification values in linear regression, it's difficult to obtain a level of certainty. 
                         This is because the linear loss function that gives values of either 1 or 0 is not helpful when data is not linearly seperable.
