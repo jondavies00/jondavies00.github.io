@@ -73,7 +73,18 @@
                         <h3 id="deadlock">
                             Deadlock
                         </h3>
-                        Deadlock is what happens when threads both use and request resources in a circular queue. There are <b>four</b> conditions that must simultaneously
+                        Deadlock is what happens when threads both use and request 
+                        <div class="tooltip">resources
+                            <span class="tooltiptext"> These can include CPU cycles, files, and I/O devices. Mutex locks and semaphores are <b>also</b> resources</span>
+                        </div> 
+                        in a circular queue. Typically, a system table records whether each resource in a system is free or allocated. For each resource
+                        that is allocated, the table also records the thread that it is allocated to. When a thread requests a resource that is currently allocated 
+                        to another thread, it gets added to a queue of threads waiting for this resource. If every thread in the set is waiting to acquire resources
+                        that must be released by another thread in the set then they are in a <b>deadlocked</b> state.
+                        <br>
+                        <img class="circular-queue" src="images/degree-pictures/circular-queue.png">
+                        <br>
+                        There are <b>four</b> conditions that must simultaneously
                         hold for deadlock to occur:
                         <ol>
                             <li><b>Mutual Exclusion</b></li>
