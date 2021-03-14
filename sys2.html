@@ -88,9 +88,14 @@
                         hold for deadlock to occur:
                         <ol>
                             <li><b>Mutual Exclusion</b></li>
+                            At least <em>one</em> resource must be held in a nonsharable mode i.e. one thread at a time can use the resource. If another thread requests 
+                            it then it (the requesting thread) must be delayed until the resource has been released.
                             <li><b>Hold and wait</b></li>
+                            A thread must be holding at least one resource and waiting to acquire additional resources that are currently being held by other threads.
                             <li><b>No preemption</b></li>
+                            Resources cannot be preempted (they can only be released voluntarily by the thread holding it when its completed its task)
                             <li><b>Circular wait</b></li>
+                            A set {T0, T1, ..., Tn} is a
                         </ol>
                     </div>
                 </div>
