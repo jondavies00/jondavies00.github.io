@@ -36,7 +36,7 @@
                     <div class="portfolio-img-background" style="background-image:url(images/linkedin_icon.jpg);"></div>
                     <div class="img-text-wrapper">
                         <div class="logo-wrapper">
-                            
+                            <img src="images/temp_logo.png">
                         </div>
                         <div class="subtitle">
                             Here is a link to my Linkedin profile
@@ -47,7 +47,7 @@
                     <div class="portfolio-img-background" style="background-image:url(images/github_icon.png);"></div>
                     <div class="img-text-wrapper">
                         <div class="logo-wrapper">
- 
+                            <img src="images/temp_logo.png">
                         </div>
                         <div class="subtitle">
                             Here is a link to my github page
@@ -58,7 +58,7 @@
                     <div class="portfolio-img-background" style="background-image:url(images/twitter_icon.png);"></div>
                     <div class="img-text-wrapper">
                         <div class="logo-wrapper">
-
+                            <img src="images/temp_logo.png">
                         </div>
                         <div class="subtitle">
                             Here is a link to my Twitter
@@ -69,7 +69,7 @@
                     <div class="portfolio-img-background" style="background-image:url(images/york_icon.png);"></div>
                     <div class="img-text-wrapper">
                         <div class="logo-wrapper">
-                            
+                            <img src="images/temp_logo.png">
                         </div>
                         <div class="subtitle">
                             Here is a link to the University of York, where I am studying for a degree in Computer Science
@@ -80,7 +80,7 @@
                     <div class="portfolio-img-background" style="background-image:url(images/fb_icon.png);"></div>
                     <div class="img-text-wrapper">
                         <div class="logo-wrapper">
-                            
+                            <img src="images/temp_logo.png">
                         </div>
                         <div class="subtitle">
                             Here is a link to my Facebook profile
@@ -91,7 +91,7 @@
                     <div class="portfolio-img-background" style="background-image:url(images/youtube_icon.png);"></div>
                     <div class="img-text-wrapper">
                         <div class="logo-wrapper">
-                            
+                            <img src="images/temp_logo.png">
                         </div>
                         <div class="subtitle">
                             Here is a link to my YouTube
@@ -102,4 +102,16 @@
         </div>
     </div>
 </body>
+<script>
+    const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+    portfolioItems.forEach(portfolioItem => {
+        portfolioItem.addEventListener('mouseover', () => {
+            portfolioItem.childNodes[1].classList.add('img-darken');
+        })
+        portfolioItem.addEventListener('mouseout', () => {
+            portfolioItem.childNodes[1].classList.remove('img-darken');
+        })
+    })
+</script>
 </html>

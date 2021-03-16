@@ -150,7 +150,10 @@ body {
     height: 30%;
 }
 
-
+table, th, td {
+    border: 1px solid black;
+    width: 300px;
+  }
 
 a {
     color: rgb(0, 102, 255);
@@ -187,4 +190,27 @@ a {
     padding-left: 100px;
     padding-right: 100px;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.logo-wrapper img{
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+.img-text-wrapper .subtitle {
+    transition: 1s;
+    font-weight: 600;
+    color: transparent;
+}
+
+
+/* Needs to be more specific with selector */
+.img-text-wrapper:hover .subtitle {
+    font-weight: 600;
+    color: lightseagreen;
+}
+
+.img-darken {
+    transition: 1s;
+    filter: brightness(10%);
 }

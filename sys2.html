@@ -46,33 +46,63 @@
                 <div class="sys2-header">
                     <h1>Systems and Devices 2</h1>
                     <h2>Credits: 10</h2>
-                    <h3><a href="https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/COM00021I/2020-21"> Module Description</a></h3>
+                    <h2><a href="https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/COM00021I/2020-21"> Module Description</a></h2>
                 </div>
                 <div class="sys2-topics-wrapper">
                     <div class="list-of-topics">
-                        <h3>Topics:</h3>
+                        <h2>Topics:</h2>
                         <ul>
-                            <li>Operating Systems</li>
-                            <li>Processes</li>
-                            <li>Interprocess Communication</li>
-                            <li>Threads</li>
-                            <li>Process Scheduling</li>
-                            <li>Synchronisation</li>
-                            <li>Deadlock</li>
-                            <li>Memory Management</li>
-                            <li>IO Storage Management</li>
+                            <li style="color: red">Operating Systems</li>
+                            <li style="color: red">Processes</li>
+                            <li style="color: red">Interprocess Communication</li>
+                            <li style="color: red">Threads</li>
+                            <li style="color: red">Process Scheduling</li>
+                            <li style="color: red">Synchronisation</li>
+                            <li style="color: green">Deadlock</li>
+                            <li style="color: red">Memory Management</li>
+                            <li style="color: red">IO Storage Management</li>
                         </ul>
                     </div>
                     <div class="operating-systems">
-                        <h3 id="os">
+                        <h2 id="os">
                             Operating Systems
-                        </h3>
-                        Operating systems are..
+                        </h2>
+                        Operating systems are...
+                    </div>
+                    <div class="processes">
+                        <h2 id="process">
+                            Processes
+                        </h2>
+                        Processes are...
+                    </div>
+                    <div class="interprocess-communication">
+                        <h2 id="ipc">
+                            Interprocess Communication
+                        </h2>
+                        Interprocess communication is...
+                    </div>
+                    <div class="threads">
+                        <h2 id="thread">
+                            Threads
+                        </h2>
+                        Threads are...
+                    </div>
+                    <div class="process-scheduling">
+                        <h2 id="process-scheduling">
+                            Process Scheduling
+                        </h2>
+                        Process Scheduling is...
+                    </div>
+                    <div class="synchronisation">
+                        <h2 id="sync">
+                            Synchronisation
+                        </h2>
+                        Synchronisation is...
                     </div>
                     <div class="deadlock">
-                        <h3 id="deadlock">
+                        <h2 id="deadlock">
                             Deadlock
-                        </h3>
+                        </h2>
                         Deadlock is what happens when threads both use and request 
                         <div class="tooltip">resources
                             <span class="tooltiptext"> These can include CPU cycles, files, and I/O devices. Mutex locks and semaphores are <b>also</b> resources</span>
@@ -95,8 +125,201 @@
                             <li><b>No preemption</b></li>
                             Resources cannot be preempted (they can only be released voluntarily by the thread holding it when its completed its task)
                             <li><b>Circular wait</b></li>
-                            A set {T0, T1, ..., Tn} is a
+                            A set {T0, T1, ..., Tn} of waiting threads must exist such that T0 is waiting for a resource held by T1, T1
+                            is waiting for a resource held by T2, Tn-1 is waiting for Tn, and Tn is waiting for T0.
                         </ol>
+
+                        <h3> Resource-Allocation Graph</h3>
+                        We can describe deadlocks more precisely using a directed graph called a 
+                        <b style="color: rgb(0, 102, 255);">system resource-allocation graph</b> consisting of vertices
+                        V and edges E. V is split into T = {T1, T2, ..., Tn} and R = {R1, R2, ..., Rn}, the sets of threads and resource <em>types</em>
+                        respectively. We represent a resource request as a directed edge from thread Ti, to resource type Rj (Ti -> Rj). A directed
+                        edge from resource type Rj to thread Ti, represents that a resource has been allocated to the thread (Rj -> Ti).
+                        These edges are called <b>request edges</b> and <b>assignment edges</b> respectively.
+                        <br>
+                        The number of resources in a resource type Rj are represented graphically as a small dot '<b>.</b>', as resource types
+                        can have multiple resources available. Therefore an assigment edge must designate one of the dots.
+                        <br>
+                        A cycle <em>must</em> have a cycle to be in a deadlocked state. If there is a cycle, then the system <b>may or may not</b> be
+                        in a deadlocked state. 
+
+                        <h3>Handling Deadlocks</h3>
+                        The deadlock problem can be handled by an operating system in one of three ways:
+                        <ul>
+                            <li>We can ignore the problem and pretend deadlocks never occur!</li>
+                            Linux and Windows use this method and therefore leave it up to kernel and application developers to
+                            handle them.
+                            <br><br>
+                            <li>We can use a protocol to prevent or avoid deadlocks</li>
+                            Prevention -> ensure one of the necessary conditions do not hold
+                            <br>
+                            Avoidance -> the system is given additional information in advance concerning resources allocation so 
+                            it can be decided whether or not threads should wait when requesting a resource.
+                            <br><br>
+                            <li>We can allows the system to enter a deadlocked state, detect it, and then recover</li>
+                            Databases use this.
+                        </ul>
+
+                        <h3>Deadlock Prevention</h3>
+                        We ensure one of the necessary conditions do not hold.
+                        <ul>
+                            <li>
+                                <b>Mutual Exclusion:</b> we can use sharable resources, that do not require mutually exclusive access. For example,
+                                read only files. However, this does not work as some resources are intrinisically nonsharable.
+                            </li>
+                            <li>
+                                <b>Hold and Wait:</b> ensuring hold-and-wait does not occur, we must guarantee that when a thread requests a resource,
+                                it does not hold any other resources. We could use a protocol where threads must be allocated all its resources before
+                                it begins execution. However this is impractical due to the dynamic nature of requesting resources. This leads to low
+                                resource utilization (since resources may be allocated but unused for a while). Also, starvation is possible as a thread 
+                                may never be allocated its resources if they are popular and always allocated to other threads.
+                            </li>
+                            <li>
+                                <b>No Preemption:</b> ensuring this does not hold means adopting a protocol like the following. If a thread is holding
+                                resources and requests another that cannot be immediately allocated, then all resources the thread is currently holding 
+                                are preempted. This means they are released, and added to the list of resources the thread is waiting for. Only when the
+                                resources it had before, and the ones it now requires, are available can the thread be restarted.
+                                <br>
+                                This protocol is well suited to resources whose state can be easily saved and restored later, like CPU registers and
+                                database transactions. It is not well-suited for resources like mutex locks and semaphores, where deadlocks occcur most
+                                frequently.
+                            </li>
+                            <li>
+                                <b>Circular Wait:</b> this conditions presents the best opportunity for preventing deadlocks. To do this, we must impose 
+                                a total ordering of all resource types, and to require that each thread requests resources in an increasing order of
+                                enumeration.
+                                <br>
+                                A function will give each resource type a unique natural number (F: R -> N). Resources will be requested in an increasing 
+                                order of enumeration. So if Ri is requested, the thread can request Rj only if F(Rj) > F(Ri). If several instances of the 
+                                same resources are needed, a <b>single</b> request for all of them must be issued.
+                            </li>
+                        </ul>
+                        <h3>Deadlock Avoidance</h3>
+                        If we can gather information about what resources that threads will use <em>ahead of time</em> then we can avoid a situation in 
+                        which deadlock is possible. For example, one model requires that each thread declare the max number of resources of each type that
+                        it may need.
+                        <h4>Safe state</h4>
+                        A state is <em>safe</em> if the system can allocate resources to each thread (up to its maximum) in some order and still avoid a 
+                        deadlock. That is, there must exist a <b>safe sequence</b> of threads, where each threads request can be satsified by the currently
+                        available resources plus the resources held by the ones before it.
+                        <br><br> <b>Example:</b> <br><br>
+                        Consider the following system, with twelve resources and three threads.
+                        <br><br>
+                        <table width="200px">
+                            <tr>
+                                <th>Thread</th>
+                                <th>Maximum needs</th> 
+                                <th>Current needs</th>
+                              </tr>
+                              <tr>
+                                <td>T0</td>
+                                <td>10</td>
+                                <td>5</td>
+                              </tr>
+                              <tr>
+                                <td>T1</td>
+                                <td>4</td>
+                                <td>2</td>
+                              </tr>
+                              <tr>
+                                <td>T2</td>
+                                <td>9</td>
+                                <td>2</td>
+                              </tr>
+                        </table>
+                        <br> Since 9 resources are currently being used (5+2+2), we have 3 (12-9) free resources. <br>
+                        A t0, the system is in a safe state as there exists a sequence &lt;T1, T0, T2&gt;. We immediately can allocate T1 with the 2 exta
+                        resources it needs (giving 3-2=1 free resource), until it releases all its resources after finishing (1+4) freeing up 5 resources.
+                        These 5 resources can then be given to T0, which then frees up 10 in total. Then 7 resources can be given to T2 which then finishes.
+                        <br><br>
+                        Now we have defined a state where deadlock cannot exist, we can create avoidance algorithms that ensure the system cannot reach 
+                        these states.
+                        <h4>Banker's Algorithm</h4>
+                        This algorithm is useful for when we have multiple instances of each resource type. A new type of edge is used, the <b>claim edge</b>. 
+                        This edge is made before threads request resources, to indicate that the thread may request a certain resource in the future. It is 
+                        represented by a dashed line. It gets converted into a request edge when the resource is requested, and back into a claim edge after
+                        the resource is released.
+                        <br> <br>
+                        The banker's algorithm ensures that that when a new thread enters the system, it must declare the maximum number of instances 
+                        of each resource type that it may need, and cannot exceed the total number of  resources in the system. When resources are requested, 
+                        the system must determine whether the allocation of these resource will leave the system in a safe state.
+                        <br> <br>
+                        Several data structures must be maintained for implemenetation of the algorithm:
+                        <ul>
+                            <li>Available. A vector of length m that indicates the number of available resources of each type.</li>
+                            <li>Max. An n x m matrix that defines the maximum demand of each thread. Max[i][j] = k means thread Ti may request at most
+                                k instances of resource type Rj
+                            </li>
+                            <li>Allocation. An n x m matrix that defines the number of resource of each type currently allocated to each thread.</li>
+                            <li>Need. An n x m matrix that indicates the remaining resource need of each thread. Need[i][j] = Max[i][j] - Allocation[i][j]</li>
+
+                                                         
+                        </ul>
+                        The algorithm works as follows: <br>
+                        <img class="safety-algorithm" src="images/degree-pictures/safety_algorithm.PNG"> <br>
+                        Essentially, it allocates all threads as 'unfinished'. When it finds a thread that has needs that can be met (i.e. its resource needs
+                        are available) then it gets allocated the resources, and these resources then get added to 'work'. If no thread can have its need met by
+                        the available resources, the algorithm will decide the state is unsafe.
+                        <br> <br>
+                        We now need to use a resource-request algorithm, to determine whether requests can be safely granted: <br>
+                        <img class="resource-request-algorithm" src="images/degree-pictures/resource-request.PNG"> <br>
+
+                        <h3>Deadlock Detection</h3>
+                        We can use algorithms to detect deadlocks, too. However, we must decide when we should invoke the detection algorith. This depends on two 
+                        factors:
+                        <ol>
+                            <li>How <em>often</em> is a deadlock likely to occur?</li>
+                            <li>How <em>many</em> threads will be affected by deadlock when it happens?</li>
+                        </ol>
+                        Generally, if deadlocks occur freqeuntly, then the detection algorithm ought to be invoked frequently to maximise
+                        resource utilization. Checking for deadlocks at arbritrary points in time means we cannot tell which of the many deadlocked threads 'caused'
+                        the deadlock.
+                        <h3>Recovery from Deadlock</h3>
+                        There are two options for breaking a deadlock. One is simply to abort one or more threads to break the circular wait. The other
+                        is to preempt some resources fromm one or more of the deadlocked threads.
+                        <h4>Process and thread termination </h4>
+                        We can either abort all deadlocked processes (will definitely break the cycle, but at great expense), or abort one process at a time 
+                        until the deadlock cycle is eliminated. The second method incurs a lot of overhead, as we need to run the deadlock-detection algorithm
+                        every time we abort a process.
+                        <br> <br>
+                        In choosing which processes should be aborted, we want the ones that will incur the minimum cost. However <b>minimum cost</b> is subjective.
+                        There are number of factors that may affect the choice of process such as:
+                        <ul>
+                            <li>Process priority</li>
+                            <li>Length of time process has been computing, and how much longer is left</li>
+                            <li>How many, and types, of resources the process has used (are they simple to preempt?)</li>
+                            <li>How many mmore resources the process needs</li>
+                            <li>How many processes will need to be terminated</li>
+                        </ul>
+                        <h4> Resource Preemption</h4>
+                        To eliminate deadlocks using resource preemption, we succcessively preempt (remove and give to other) resources from processes and give 
+                        these resources to other processes, until the deadlock cycle is broken. <br>
+                        Three issues will need to be addressed:
+                        <ol>
+                            <li><b>Selecting a victim</b></li>
+                            Which resources and which processes are to be pre-empted? Want to minimize cost (e.g. amount of time process has thus far consumed).
+                            <li><b>Rollback</b></li>
+                            What happens to the process? It cannot continue, so we must roll it back to some safe state and restart it from that state. Usually
+                            it is easier to completely restart it, as determining the safe state is difficult. 
+                            <li><b>Starvation</b></li>
+                            How do we ensure starvation will not occur (resources not preempted from the same process every time)? The same victim may always be 
+                            picked if using minimum cost. We must therefore ensure a victim can only be picked a small, finite number of times. We can therefore 
+                            include the number of rollbacks in the cost factor.
+
+
+                        </ol>
+                    </div>
+                    <div class="memory-management">
+                        <h2 id="memory-mgmt">
+                            Memory Management
+                        </h2>
+                        Memory Management is...
+                    </div>
+                    <div class="io-storage-management">
+                        <h2 id="io-storage-mgmt">
+                            I/O Storage Management
+                        </h2>
+                        I/O Storage Management is...
                     </div>
                 </div>
                 
