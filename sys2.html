@@ -43,12 +43,12 @@
                 
             </div>
             <div class="text-wrapper">
-                <div class="sys2-header">
+                <div class="module-header">
                     <h1>Systems and Devices 2</h1>
                     <h2>Credits: 10</h2>
                     <h2><a href="https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/COM00021I/2020-21"> Module Description</a></h2>
                 </div>
-                <div class="sys2-topics-wrapper">
+                <div class="module-topics-wrapper">
                     <div class="list-of-topics">
                         <h2>Topics:</h2>
                         <ul>
@@ -67,7 +67,65 @@
                         <h2 id="os">
                             Operating Systems
                         </h2>
-                        Operating systems are...
+                        <h3>What is an operating system?</h3>
+                        <p>
+                        Operating systems are <b>software</b> that manage computer's <b>hardware</b>. They act as an intermediary between the computer user and the computer hardware. They also provide the basis for 
+                        application programs.
+                        They provide:
+                        <ul>
+                            <li>Memory Management</li>
+                            <li>I/O Management</li>
+                            <li>Storage Management</li>
+                        </ul>
+                        </p>
+                        <h3>Why do we need operating systems?</h3>
+                        <p>
+                            3 Reasons:
+                            <ol>
+                                <li><b>Convenience:</b> computer will be easier to use</li>
+                                <li><b>Efficiency:</b> allows the computer system resources to be used efficiently</li>
+                                <li><b>Abstraction</b> and interoperability: allows programmers/users flexibility to use different programming languages to application development, without having to worry about hardware architecture.</li>
+                            </ol>
+                            There are a number of com
+                        </p>
+                        <h3>Types of OS</h3>
+                        <p>
+                            There are many different operating systems to support different computing paradigms.
+                            For example:
+                            <ul>
+                                <li>Free and open-source OS (e.g. UNIX)</li>
+                                <li>Closed source or proprietry OS (e.g. Windows)</li>
+                                <li>Hybrid approach (e.g. MacOS that has an open-source kernel but closed-source components too)</li>
+                            </ul>
+                        </p>
+                        <h3>Operating System Services</h3>
+                        <img src="images/degree-pictures/os-overview.png">
+                        <p>
+                           There are a number of different operating system services as shown above:
+                           <ul>
+                               <li>User interface: user interfaces allow the user to interact with the operating system through mouse/keyboard</li>
+                               <li>Program execution: the system must be able to load a program into memory and run it. The programm must be able to end its execution</li>
+                               <li>I/O operations: a running program may require I/O, that the operating system must allow the user to give.</li>
+                               <li>File-system manipulation: programs will need to read and write files and directories, and be able to delete them, search for them and list information.</li>
+                               <li>Communications: processes will often need to exchange information with other processes. This is done through <b>shared memory</b> or <b>message passing</b></li>
+                               <li>Error detection: the OS needs to be detecting and correcting errors all the time.</li>
+                           </ul>
+                           Some of the services exist not for helping the user, but for ensuring efficcient operation of the system itself:
+                           <ul>
+                                <li>Resource allocation: when multiple processes run at the same time, resources must be allocated to each of them. The OS must manage this.</li>
+                                <li>Accounting: we want to keep track of which programs use how and what kinds of computer resources. These statistics can be useful for administrators wishing to optimise comptuing services.</li>
+                                <li>Protection and security: information owners in a shared system may want to control use of the information. The OS must therefore make sure all access to system resources is controlled.</li>
+                            </ul>
+                        </p>
+                        <h3>System Calls</h3>
+                        <p>
+                            System calls provide an interface to the services made available by an operating system, for a program, usually as functions written in C and C++. For example, <b>cp in.txt out.txt</b> copies the input file 
+                            to the output file. Application programmers will make use of Application Programming Interfaces <b>(APIs)</b>. These specify a set of functions that are available to the programmer, including
+                            expected parameters and return values. A programmer accesses the API (e.g. POSIX API) through a library of code provided by the OS. For UNIX systems with programs written in C, the library is called
+                            <b>libc.</b> So, APIs are sets of functions a programmer can access, to make use of system calls. APIs are accessed by a programmer using a library that the OS provides for that language.
+                            
+                        </p>
+                        <img src="images/degree-pictures/system-call.png">
                     </div>
                     <div class="processes">
                         <h2 id="process">
@@ -313,7 +371,68 @@
                         <h2 id="memory-mgmt">
                             Memory Management
                         </h2>
-                        Memory Management is...
+                        <h3>Basics:</h3>
+                        <p>
+                            The only way the CPU can retrieve memory is through main memory and the registers.
+                            The CPU fetches instructions from main memory according to the value of the program counter.
+                        </p>
+                        <img src="images/degree-pictures/cpu-memory.png">
+                        <p>
+                            The memory in the processing cores, also called cache memory, is more difficult for the operating system to control.
+                            The memory unit sees a stream of one of the following:
+                            <ul>
+                                <li>A read request + an address (e.g. LOAD memory location '20010' into register number '8'.</li>
+                                <li>A write request + some data + an address (e.g. STORE contents of register '6' into memory location '1090'</li>
+                            </ul>
+                            The memory unit does not know <b>how</b> these addresses get generated. Accessing the register can be done within one
+                            CPU clock. However, main memory access may take many cycles of the CPU clock. The processor must stall as it does not have
+                            the required data to complete the instructions it is executing.
+                            <br>
+                            Therefore, we use <em>cache memory</em> to sit between main memory and the CPU registers to mitigate stalling.
+                        </p>
+                        <h3>Address Space</h3>
+                        <p>
+                            A (logical) address space is a range of addresses that an OS makes availible to a process. The OS enforces meemory protection.
+                            That is, a process can only read and write witihn its address space. We must therefore seperate memory spaces which we do by
+                            providing a range of legal addresses that the process may access. This is done through two registers, a base and a limit.
+                            The <b>base register</b> holds the smallest legal physical memory address, and the <b>limit register</b> sepcifices the size
+                            of the range. For example, if the base registers holds 300040 and the limit register is 120900, then the program ccan legally
+                            access all addresses from 300040 through 420939 (base + limit) inclusive.
+                            
+
+                        </p>
+                        <img src="images/degree-pictures/base-limit-registers.png">
+                        <p>
+                            It is the CPUs job to check that every memory access generated in user mode is between the base and the base+limit for that
+                            process.
+                        </p>
+                        <p>
+                            There is also the issue of deciding where the program gets stored in main memory (after ist is loaded from secondary storage).
+                            Could use address 0000 for the first physical address of a program and use that as reference, but this is impractical. Therefore
+                            we need hardware and/or software support for memory management.
+                        </p>
+                        <p>
+                            Addresses are represented in different ways at different stages of a program's life e.g. as a programmer you may use a variable name,
+                            but the compiler will bind these symbolic addresses to relocatable addresses. The linker/loader will bind relocatable addresses to
+                            absolute addresses.
+                            The binding of instructions and data to memory addresses can be done at any step along the way:
+                            <ul>
+                                <li> 
+                                    <b>Compile time</b>: if you know at compile time where the process will reside in memory, then <b>absolute code</b> can be generated.
+                                    The code will need to be recompiled if the starting location changes at some later time.
+                                </li>
+                                <li>
+                                    <b>Load time</b>: if it is not known at compile time where the process will reside in memory, then the compiler must generated
+                                    <b>relocatable code</b>. Here, the final binding is delayed until load time. If the starting address changes, we need only to
+                                    reload the user code to incorporate this changed value.
+                                </li>
+                                <li>
+                                    <b>Execution time</b>: if the process can be moved during its execution from one memory segment to another, then binding must
+                                    be delayed until run time. Special hardware is needed for this scheme to work. Most OSs use this method.
+                                </li>
+                            </ul>
+                        </p>
+                        <img src="images/degree-pictures/program-loading.png">
                     </div>
                     <div class="io-storage-management">
                         <h2 id="io-storage-mgmt">
