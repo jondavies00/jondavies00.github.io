@@ -126,6 +126,34 @@
                             
                         </p>
                         <img src="images/degree-pictures/system-call.png">
+                        <p>
+                            A <b>system call interface</b> is provided by the run-time nevironment (i.e. the softare needed for a program in a programming language to be executed). This serves as the link to system calls mmade available
+                            by the operating system. Often, we need more information than just the identity of the system call. For example, to get an input file we need the name of the file. To pass parameters to the OS, usually registers
+                            are used. However, if there are more parameters than registers, a block that stores the parameters will be passed as a parameter to a register.
+                        </p>
+                        <h3> Types of system calls</h3>
+                        <ul>
+                            <li><b>Process control:</b> These system calls include methods to create and terminate processes, load and execute them, get process attributes, wait for an event and signal for one, and allocate and free up
+                            memory. </li>
+                            <li><b>File management:</b>These include methods to create and delete files, open and close files, read, write and reposition files, and get file attributes.</li> 
+                            <li><b>Device management:</b> These include methods to request and release devices, read and write to them, get device attributes, and logically attach, or detach, devices.</li>
+                            <li><b>Information maintenance:</b> These include methods to get and set time/date, get and set system data, get processes, files or device attributes, and set them.</li>
+                            <li><b>Communications:</b> These include methods to send and recieve messages, create and delete connections, transfer status information and attach or detach remote devices.</li>
+                            <li><b>Protection:</b>These include methods such as getting and setting file permissions.</li>
+                        </ul>
+                        <h3>System utilities</h3>
+                        <p>System utilities provide a convenient environment for program development and execution. Some are just interface to system calls (i.e. call a service), whereas as others are more complex.
+                            They can be divided into these categories:
+                            <ul>
+                                <li>File management</li>
+                                <li>Status information</li>
+                                <li>File modification</li>
+                                <li>Programming language support (i.e. compilers, assemblers and debuggers)</li>
+                                <li>Program loading and execution</li>
+                                <li>Communications</li>
+                                <li>Background services</li>
+                            </ul>
+                        </p>
                     </div>
                     <div class="processes">
                         <h2 id="process">

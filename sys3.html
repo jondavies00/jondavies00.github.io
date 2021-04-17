@@ -2,8 +2,396 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>SYS2</title>
+    <title>SYS3</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/icon.png">
 </head>
+<body>
+    <div class="container"> <!-- divs can be used to apply styles (in css) to sections of code-->
+        <div class="nav-wrapper">
+            <div class="left-side">
+                <div class="nav-link-wrapper">
+                    <a href="index.html">Home</a>
+                   
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="about.html">About</a>
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="cs_degree.html">CS Degree Stuff</a>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="brand">
+                    <div> JONATHAN DAVIES</div> <!-- By themselves, div's only function is a line break-->
+                </div>
+            </div>
+        </div>
+        <div class="content-wrapper">
+            <div class="sidenav">
+                <a href="#principles">Principles of Computer Design</a>
+                <a href="#intro-risc">Introduction to RISC Pipeline</a>
+                <a href="#hazards">Pipeline Hazards</a>
+                <a href="#branch">Control Hazards and Branch Prediction</a>
+            </div>
+            <div class="text-wrapper">
+                <div class="module-header">
+                    <h1>Systems and Devices 3</h1>
+                    <h2>Credits: 10</h2>
+                    <h2><a href="https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/COM00018I/2020-21"> Module Description</a></h2>
+                </div>
+                <div class="module-topics-wrapper">
+                    <div class="list-of-topics">
+                        <h2>Topics:</h2>
+                        <ul>
+                            <li style="color: rgb(0, 255, 0)">Principles of Computer Design</li>
+                            <li style="color: rgb(0, 255, 0)">Introduction to RISC Pipieline</li>
+                            <li style="color: rgb(0, 255, 0)">Pipeline Hazards</li>
+                            <li style="color:rgb(0, 255, 0)">Control Hazards and Branch Prediction</li>
+                        </ul>
+                    </div>
+                    <div class="principles">
+                        <h2 id="principles">
+                            Principles of Computer Design 
+                        </h2>
+                        <h3>Measuring Performance</h3>
+                        <p>
+                            How can we say one computer/architecture is better than another?
+                            A system could be faster than other depending on exeuction time or throughput (transactions per unit time).
+                            A system X will be <b>n</b> times faster than another system Y for: <br>
+                            Execution Time Y / Executon time X = <b>n</b> (we divide y by x because smaller time is desired)<br>
+                            Throughput X / Throughput Y = <b>n</b>
+                        </p>
+                        <p>
+                            There are a number of performance metrics we can use for systems:
+                            <ul>
+                                <li>Response item</li>
+                                <li>Throughput</li>
+                                <li>CPU time</li>
+                                <li>Wall clock time</li>
+                                <li>Speedup</li>
+                            </ul>
+                            There are a number of benchmark methods we can use to measure these. For example, toy programs (e.g. sorting, matrix 
+                            multiply) or other benchmark programs.
+                        </p>
+                        <h3>Benchmark Suites</h3>
+                        <p>
+                            Benchmark suites are large programs that are widely used for determining performance of hardware. For example, SPEC06 or 
+                            SPLASH. They perform various common functions such as compression, or searching.
+                        </p>
+                        <p>
+                            With SPEC, there is a a parameter called SPEC ratio. It is defined by the execution time of a program by a reference machine compared to another machine A.
+                            <img src="images/degree-pictures/spec-ratio.PNG"style="width:50%; height:50%;"> <br>
+                            <br>
+                            The execution time of one machine B divided by another A is the same as the performance of A divided by the performance of B.
+                            <br>
+                            You may have a number of benchmarks for a specific machine, so taking the geometric mean of A1 up to Ai gives the average SPEC ratio for the machine.
+                            Geometric mean is defined as the nth root of the sum of the benchmarks of 1 to n.
+                        </p>
+                        <h3>Amdahl's Law</h3>
+                        <p>This is the speedup that can be gained by improving some portion of a computer. It is limited by the fraction of how long the faster bit can be used:
+                            <img src="images/degree-pictures/amdahl.PNG"style="width:50%; height:50%;"> <br>
+                            <br>
+                            We can apply Amhdahl's Law to parallel processing. If a is the fraction of processors we can make parallel, and n is the total amount of processors, the speed up we gain from 
+                            making them parallel will be 1/ ((1-a) + a/n). 
+                            This can be graphed: <br>
+                            <img src="images/degree-pictures/amdahl2.PNG"style="width:50%; height:50%;"> <br>
+
+                        </p>
+                        <h3>CPU Clock</h3>
+                        <p>
+                            All processors are driven by the clock, expressed as clock rate in GHz (cycles per second) or clock period in ns (nanoseconds). The CPU time is the number of CPU clock cycles for a given
+                            program multiplied by the clock cycle time. Clock cycle time is the seconds the program took / clock cycle time.
+                            There are a number of metrics involved in calculating CPU time:
+                            <ul>
+                                <li>IC (instruction count): the number of instructions in a given program. Can be split up by number of Branch, Load, and ALU instructions.</li>
+                                <li>CLI: cycles per instruction. Different instructions may have different CLIs. CLI * IC gives number of cycles.</li>
+                                <li>Clock cycle time: the time it takes for a given clock cycle. Calculated by 1/clock rate.</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="intro-risc">
+                        <h2 id="intro-risc">Introduction to RISC Pipeline</h2>
+                        <p>
+                            RISC stands for Reduced Instruction Set Computer. There are 32 registers (32 bit each) in a RISC machine. Instructions are of uniform length and a RISC-Load store architecutre is used.
+                            The registers are 32 bits, so instructions are represented as 4 bytes.
+                        </p>
+                        <p>
+                            There are 3 types of instruction. R, I and J: <br>
+                            <img src="images/degree-pictures/risc1.PNG"style="width:50%; height:50%;"> <br>
+                        </p>
+                        <h3>Brief notes on instructions</h3>
+                        <p>
+                            'lw' is 'load word' and loads a word from main memory into the destination register. For example lw $4 $8
+                            will load whatever is at memory address register 8 into the destination register. An offset is used, 
+                            e.g. lw $4 (4)$8 if we wanted to select the 4th part of memory address 8, for example in a list.
+                        </p>
+                        <p>'sw' is 'store word' and stores a word from the register into main memory.</p>
+                        <h3>Pipelines</h3>
+                        <p>A pipeline is making sure the system is constantly busy. For example, if you had a washer, a dryer, and a place to fold clothes, instead of washing, drying and folding
+                            clothes one at a time, you would wash some clothes, then whilst they are drying, you would put more in the washer. Once the clothes are dry, you fold them, and put the 
+                            newly washed clothes in the drier, and more in the washer. This way, no time gets wasted.
+                        </p>
+                        <p>
+                            There are some pipelining charactersitics:
+                            <ul>
+                                <li>Pipelining doesn't reduce latency of a single task. It improves the throughput of the entire workload.</li>
+                                <li>The pipeline rate is limited by the slowest pipeline stage.</li>
+                                <li>The potential speedup is equal to the number of pipe stages</li>
+                                <li>Unbalanced lengths of pipe stages reduces speedup (e.g. if you had to wait 2 hours for the washer but only 30 minutes for the drier, the washer is the bottleneck)</li>
+                                <li>The time to fill the pipeline and time to drain it reduces the speedup.</li>
+                            </ul>
+                        </p>
+                        <p>
+                            Pipelining partitions the system into multiple independent stages with added buffers between the stages. <br>
+                            <img src="images/degree-pictures/pipelining.PNG"style="width:50%; height:50%;"> <br>
+                            The philosophy is that if we can partition parts of operations into subsections, we can reuse these for other instructions.
+                        </p>
+                        <p>
+                            The RISC pipeline can be portrayed by this diagram:<br>
+                            <img src="images/degree-pictures/riscpipeline.PNG"style="width:50%; height:50%;"> <br>
+                            It looks confusing, but we split it into sections. The green blocks are the pipeline register interfaces, and make up 5 stages:
+
+                            <ol>
+                                <li>
+                                    Instruction fetch (IF): Here, each instruction can take at most 5 clock cycles. The instruction is fetched from memory, based on the PC. We increment the PC by 4
+                                    because we know there are 4 bytes for each instruction. 
+                                </li>
+                                <li>
+                                    Instruction decode (ID): Here, the instruction is decoded with a fixed field decoding method e.g. ADD R1,R2,R3 gets split into 4 sections (4 bytes).
+                                </li>
+                                <li>
+                                    Execution (EX): Here, the operation is executed. If the operation is LOAD or STORE, the memory reference needs to calculated. This involves calculating
+                                    the effective address. 
+                                    There could also be a register-register ALU instruction instead, where values from registers are operated on according to the OPCODE (e.g. ADD).
+                                </li>
+                                <li>
+                                    Memory access cycle (MEM): This stage is only used by LOAD or STORE instructions, not ALU. If it is a LOAD instruction, we load from memory and store whatever is There
+                                    in the register. If it is a STORE instruction, we store the data from the register in memory.
+                                </li>
+                                <li>
+                                    Write-back cycle: If we have a destination register, we need to write it back to the register file.
+                                </li>
+                            </ol>
+
+                            We can visualise the pipeline in the following image: <br>
+
+                            <img src="images/degree-pictures/pipeline-visual.PNG"style="width:50%; height:50%;"> <br>
+
+                        </p>
+                        <h3>Pipelining issues</h3>
+                        <p>
+                            Ideally, the computation to be performed can be evenly partintioned into uniform-latency sub-computations. In reality, there is internal fragmentation; not all pipeline stages
+                            may have uniform latency. Since memory access is a critical sub-computation, memory addressing modes should be minimized (as it is slow) and fast cache memories should be employed.
+                        </p>
+                        <p> 
+                            Secondly, we would ideally have identical computations; the same computation would be performed repeatedly on a large dumber of input data sets. In reality, there is external
+                            fragmentation; some pipeline stages may not be used. To combat this, we can reduce the commplexity and diversity of the instruction types. In RISC, this is what is used:
+                            RISC architectures use uniform stage simple instructions.
+                        </p>
+                        <p>
+                            Thirdly, there is an issue in pipelines stalls. Ideally, all instructions would be mutually independent but in reality, a later computation may require the result of an earlier one.
+                            To combat this, reduce memory addressing modes so we reduce dependency detection. We can also use register addressing mode where it easy to check for dependency.
+                        </p>
+                    </div>
+                    <div class = "pipeline-hazards">
+                        <h2 id="hazards">Pipeline Hazards</h2>
+                        <h3>Limits to pipelining</h3>
+                        <b>Hazards:</b> circumstances that would cause incorrect execution if the next instruction is fetched and executed
+                        <ul>
+                            <li><b>Structural hazards:</b> this is where different instructions, at different stages, in the pipeline want to use the same hardare resources</li>
+                            <li><b>Data hazards:</b> where an instruction in the pipeline requires data to be computed by a previous instruction still in the pipeline</li>
+                            <li><b>Control hazards:</b>where a succeeding instruction, to put into the pipeline, depends on the outcome of a previous branch instruction that is already in the pipeline</li>
+                        </ul>
+                        <h3>Structural Hazards</h3>
+                        <p>
+                            Take for example the following scenario. "Uniport memory" simply means only one thing can be read from the memory at any given time.
+                            <img src="images/degree-pictures/structural-hazard.PNG"style="width:50%; height:50%;"> <br>
+                            There is a problem with the third instruction, since it is trying to access the memory at the same time as the first.
+                        </p>
+                        <p>
+                            To resolve strucutral hazards we need to eliminate the use of the same hardare for two different things at the same time.
+                            One solution is to simply wait for whatever is using the hardware to finish. This means we must <em>detect</em> the hazard and have some kind of mechanism to <em>stall</em>.
+                            Another solution is to duplicate the hardware. Multiple such units will help both instructions to progress.
+                        </p>
+                        <p>
+                            We can detect the fact that the same memory is being accessed by two operations and resolve the hazard. To resolve, the instruction can be 'shifted' in that we wait until
+                            the next cycle to start the instruction. Another way to resolve the hazard is by introducing two caches, essentially 'duplicating' our hardware. One cache is exclusively
+                            for stroing instructions, where it will only be accessed during FETCH, and another cache will only be accessed when accessing data.
+                        </p>
+                        <h3>Data Hazards</h3>
+                        <p>
+                            In the following scenario, a data hazard appears as the register 'R1' is required in successive operations, but is not calculated until the end of the first instruction. By 
+                            this time, other instructions are already in the pipeline.
+                            
+                        </p>
+                        <img src="images/degree-pictures/data-hazard.PNG" style="width:50%; height:50%;"> <br>
+                        <p>
+                            Three generic data hazards:
+                            <ul>
+                                <li>
+                                    Read After Write (RAW): instruction J tries to read operand before instruction I writes it e.g. I: add r1,r2,r3 followed by J: sub r4,r1,r3. This is caused by a data dependence
+                                    and results from a need of communication.
+                                </li>
+                                <li>
+                                    Write after Read (WAR): instruction J writes operand before instruction I reads it (essentially reverse of RAW). This is called an anti-dependence by compiler writers. It results
+                                    from reuse of the the register name. This cannot happen in a 5 stage pipeline since all instructions take 5 stages and reads are always in stage 2 whilst writes are in stage 5.
+                                </li>
+                                <li>
+                                    Writer After Writer (WAW): instruction J writes operand before instruction I writes it. This is called an output dependence. This also cannot happens in a 5 stage pipeline as writes
+                                    are always in stage 5.
+                                </li>
+                            </ul>
+                            WAR and WAW happen only in longer pipelines, or out of order pipelines.
+                        </p>
+                        <h3>Handling Data Hazards</h3>
+                        <p>
+                            The problem is that instructions need data from the result of previous instructions that are still executing in the pipeline. The solution, therefore, is to forward data when possible.
+                        </p>
+                        <img src="images/degree-pictures/data-forward.PNG" style="width:50%; height:50%;"> <br>
+                        <p>
+                            As we are interested in R2 + R3, we can forward this to the input of the execution for the next instruction. Because writing and reading to registers is quicker than a clock cycle, 
+                            this is possible. Generally reading from a register takes half a clock cycle.
+                        </p>
+                        <p>
+                            Data after the EX or MEM stage will need to be given back to the ALU, as shown in the diagram below.
+                        </p>
+                        <img src="images/degree-pictures/data-forward2.PNG" style="width:50%; height:50%;"> <br>
+                        <p>
+                            There can still, however, be data hazards even with operand forwarding. For example, a load instruction won't be able to forward to ALU in time; it will be one clock cycle too 
+                            late. To combat this, we can 'bubble' instructions for one cycle (i.e. stall). Alternatively, we can use <b>software scheduling.</b> This involves detecting data dependencies
+                            and reordering instructions so that a load instruction and a following ALU instruction for whatever is being loaded can be seperated.
+                        </p>
+                        <img src="images/degree-pictures/software-scheduling.PNG" style="width:50%; height:50%;"> <br>
+                        <h3>Control Hazards</h3>
+                        <img src="images/degree-pictures/control-hazard-branch.PNG" style="width:50%; height:50%;"> <br>
+                        <p>
+                            By the time we want to branch to 36, instruction 14, 18, and 22 have all entered the pipeline. Because we want to branch, these instructions are incorrect. These kinds of hazards are 
+                            known as <b>control hazards.</b> 
+                        </p>
+                        <p>
+                            They happens because the branch decision is very late in the pipeline (at the MEM stage). Only branch decisions that rely on checking two register (i.e. equality check) will present 
+                            hazards, as they involve an operation that can only be done at the Ewd
+                        </p>
+                    </div>
+                    <div class = "branch">
+                        <h2 id="branch">Control Hazards and Branch Prediction</h2>
+                        <h3>Recap</h3>
+                        <p>
+                            To recap: branch instructions will generally be known in the fourth stage, meaning that other instructions that we may not want or need to execute enter the pipeline. This means 
+                            we need to flush three instructions from the pipeline. 
+                            <br>
+                            Instead, we can try and evaluate the branch instruction in the second stage, meaning we only need to flush one instruction from the pipeline (which is less complex than three).
+                            This requires the ALU, because the only possible way to check a branch instruction in the second stage is to check whether a value is equal to zero. Checking r1 == r2 means we need to 
+                            do r2 - r1 and check if the result is equal to zero. 
+                        </p>
+                        <h3> Alternatives </h3>
+                        <p>
+                            There are four ways of dealing with branch hazards:
+                            <h4>1. Stall until the branch direction is clear</h4>
+                            <p>
+                                If we know that an instruction is a branch then we can temporarily stall further operation fetching. The moment that the branch outcome is clear, we can then fetch from 
+                                the appropriate location.
+                            </p>
+                            <h4>2. Predict the branch will not be taken</h4>
+                            <p>
+                                If we predict the branch will not happen, we will bring a successor instruction into the pipeline. If it turns out that the branch does get taken, we need to 'squash' the instruction 
+                                that gets added to the pipeline.
+                            </p>
+                           <h4>3. Predict that the branch will be taken</h4>
+                           <p>
+                               To predict that the branch gets taken means we need to load instructions from the branch target address. However, this is not known at the IF stage. The target is known 
+                               at the same time as the branch outcome (the ID stage) therefore a 1 cycle branch penalty will still be incurred (because the target isn't known for 1 cycle).
+                           </p>
+                           <h4>4. Delay the branch</h4>
+                           <p>
+                               We define the branch to take place AFTER one instruction that follows the branch instruction. The 1 slot delay will allow the proper decision and branch target address in a 5 stage 
+                               pipeline. However, the key question is <em>where</em> to get the instruction to fill the branch delay slot?
+                           </p>
+                        </p>
+                        <h3>Filling the delay slot </h3>
+                        <p>We can fill the branch delay slot in a number of ways, depending on the branch or the instruction:</p>
+                        <img src="images/degree-pictures/branch-delay-slot-fill.PNG"style="width:50%; height:50%;"> <br>
+                        <p>
+                            We can see that some instructions are not dependent on the previous instructions. These can fill the delay slot. c) is used if there is a high possibility the branch is not taken (as
+                            we will have to flush the delay instruction otherwise). Therefore we can combine solutions.
+                        </p>
+                        <h3>Conditional Branches</h3>
+                        <p>
+                            <ul>
+                                <li>When do you know you have a branch? During the ID cycle</li>
+                                <li>When do you know if the branch is taken or not-taken? During the EXE cycle or the ID stage depending on the design.</li>
+                            </ul>
+                            We therefore need sophisticated solutions for the following cases:
+                            <ul>
+                                <li>When the pipeline is deep (10+ stages) which is the situation in modern pipelines</li>
+                                <li>When there are several instructions issued per cycle</li>
+                                <li>When several predicted branches are in-flight at the same time</li>
+                            </ul>
+                        </p>
+                        <h3>Dynamic Branch Prediction</h3>
+                        <p>
+                            Execution of a branch requires knowledge of a few things:
+                            <ul>
+                                <li>The branch instruction: we encode whether an instruction is a branch or not, and decide on whether it's take or not taken. This can be done at the IF stage.</li>
+                                <li>Whether the branch is taken or not-taken</li>
+                                <li>If the branch is taken, what is the target address? This can be computed but can also be 'precomputed' i.e. stored in a table.</li>
+                                <li>If the branch is taken, what is the instruction at the branch target address?</li>
+                            </ul>
+                        </p>
+                        <p>
+                            To do this, we can use a <b>Branch Prediction Buffer (BPB)</b>. This is also called a Branch Prediction/History Table (BPT/BHT). It records the previous outcomes of the branch instructions.
+                            A prediction using BPB is attempted when the branch instruction is fetched (IF stage). It is then acted upon during the ID stage, once we know we have a branch.
+                        </p>
+                        <p>
+                            There are two decisions in using the BPB. First of all, we need to know wether a prediction has been made. Then need to know whether it is a correct or incorrect decision.
+                            So, there are two cases:
+                            <ol>
+                                <li>Case 1: A prediction was made and was correct (known at ID stage), or no prediction was made but the default was correct: no delays.</li>
+                                <li>Case 2: A prediction was made and was not correct, or no prediction was made and the default was incorrect: delays. </li>
+                            </ol>
+                        </p>
+                        <p>
+                            We could use a 1-bit predictor, shown here as an FSM. If we mis-predict, then we change what we next predict, and vice versa:
+                            <img src="images/degree-pictures/predict-1-bit.PNG"style="width:50%; height:50%;"> <br>
+                            We can use a 2-bit predictor that allows branches that favor taken (or not taken) to be mispredicted less often than the one-bit case:
+                            <img src="images/degree-pictures/predict-2-bit.PNG"style="width:50%; height:50%;"> <br>
+                        </p>
+                        <p>
+                            Branch prediction, as you can imagine, is very useful in loops. This is because the branch conditions will be similar, if we are looping a lot.
+                            A simple branch prediction can be implemented using a small amount of memory, indexed by lower order bits of the address of the branch instructions (the BPB).
+                            One bit stores whether the branch was taken or not, and the next time the branch instruction is fetched, we refer to this bit.
+                            For example, a branch instruction at program counter '2000' in memory is stored in a table with '1011' which refers to the last four outcomes 
+                            of this branch (taken, not taken, taken, taken). Then we could use a 4-bit predictor to predict if it branches or not. So when we next refer to this entry 
+                            (the program counter is 2000 again), we can see the outcome of the branch when it was last executed.
+                        </p>
+                        <h3>Advanced Branch Prediction Techniques</h3>
+                        <p>
+                            The basic 2-bit predictor will predict 'taken' (T) or 'not taken' (NT) for each brancch. If the prediction is wrong for two consecutive times, we change the prediction.
+
+                            Alternatively, there is something called a <b>correlating predictor</b>. Here, there are multiple 2-bit predictors for each branch. There is one for each possible combination 
+                            of outcomes of preceding n branches. This works when the outcome of one branch may be dependent on the outcome of a branch before it.
+                        </p>
+                        <p>
+                            A <b>local predictor</b> is where there are multiple 2-bit predictors for each branch but one for each possible combination of outcomes for the last n <em>occurences</em>
+                            for this branch.
+                        </p>
+                        <p>A <b>tournament predictor</b> combines the correlating predictor with the local predictor.</p>
+
+                        <p> In the branch-target buffer, we can store the isntruction at the branch address, which reduces the 'branch penalty' (i.e. cost)</p>
+                        <img src="images/degree-pictures/btb.PNG"style="width:50%; height:50%;"> <br>#
+                        <h3>Branch Folding</h3>
+                        <p>
+                            We want an optimization on the BTB such that we ahve a zero cycle branch. A large branch-target buffer will mean we can store one or more instructions. 
+                            We can add the target instruction into the BTB to deal with the longer decoding time required by the larger buffer.
+                            Branch folding can be used to obtain 0-cycle unconditional branches and sometimes 0-cycle conditional branches.
+                        </p>
+                    </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

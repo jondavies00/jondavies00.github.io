@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>About me</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/icon.png">
+    <style>
+
+    </style>
+</head>
+<body onload="startGame()">
+    <div class="container"> <!-- divs can be used to apply styles (in css) to sections of code-->
+        <div class="nav-wrapper">
+            <div class="left-side">
+                <div class="nav-link-wrapper">
+                    <a href="index.html">Home</a> <!-- An 'a' tag lets your hyperlink things-->
+                   
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="about.html">About</a>
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="cs_degree.html">Computer Science Revision</a>
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="chess.html">Javascript Chess Game (in development)</a>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="brand">
+                    <div> JONATHAN DAVIES</div> <!-- By themselves, div's only function is a line break-->
+                </div>
+            </div>
+        </div>
+
+    <script>
+        //var BlackPawn;
+        BlackPawn = new component(50, 50, "images/chess/black-pawn.png", 0, 50);
+        BlackPawn2 = new component(50, 50, "images/chess/black-pawn.png", 50, 50);
+        BlackPawn3 = new component(50, 50, "images/chess/black-pawn.png", 100, 50);
+        BlackPawn4 = new component(50, 50, "images/chess/black-pawn.png", 150, 50);
+        BlackPawn5 = new component(50, 50, "images/chess/black-pawn.png", 200, 50);
+        BlackPawn6 = new component(50, 50, "images/chess/black-pawn.png", 250, 50);
+        BlackPawn7 = new component(50, 50, "images/chess/black-pawn.png", 300, 50);
+        BlackPawn8 = new component(50, 50, "images/chess/black-pawn.png", 350, 50);
+        let pieces = [BlackPawn, BlackPawn2, BlackPawn3];
+        function startGame() {
+
+            myGameArea.start();
+        }
+        
+        var myGameArea = {
+            canvas : document.createElement("canvas"),
+            start : function() {
+                this.canvas.width = 400;
+                this.canvas.height = 400;
+                this.context = this.canvas.getContext("2d");
+                this.canvas.style.position = "absolute";
+                this.canvas.style.left = "100px";
+                this.canvas.style.top = "100px";
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.frameNo = 0;
+                this.interval = setInterval(updateGameArea, 20);
+                },
+            clear : function() {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            },
+            stop : function() {
+                clearInterval(this.interval);
+            }
+        }
+
+        function component(width, height, image, x, y, border="black") {
+            this.image = new Image();
+            this.image.src = image;
+            this.width = width;
+            this.height = height; 
+            this.x = x;
+            this.y = y; 
+            this.border = border;
+            this.update = function() {
+                ctx = myGameArea.context;
+                ctx.drawImage(this.image,this.x,this.y,this.width, this.height);
+                }
+        }
+
+        function updateGameArea() {
+                myGameArea.clear();
+                //BlackPawn.newPos();
+                for (var piece in pieces){
+                    piece.update()
+                }
+                // BlackPawn.update();
+                // BlackPawn2.update();
+                // BlackPawn3.update();
+                // BlackPawn4.update();
+                // BlackPawn5.update();
+                // BlackPawn6.update();
+                // BlackPawn7.update();
+                // BlackPawn8.update();
+    
+            }
+        
+    </script>
+    </div>
+</body>

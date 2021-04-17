@@ -2,8 +2,87 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>SYS2</title>
+    <title>SOF3</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/icon.png">
 </head>
+<body>
+    <div class="container"> <!-- divs can be used to apply styles (in css) to sections of code-->
+        <div class="nav-wrapper">
+            <div class="left-side">
+                <div class="nav-link-wrapper">
+                    <a href="index.html">Home</a>
+                   
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="about.html">About</a>
+                </div>
+                <div class="nav-link-wrapper">
+                    <a href="cs_degree.html">CS Degree Stuff</a>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="brand">
+                    <div> JONATHAN DAVIES</div> <!-- By themselves, div's only function is a line break-->
+                </div>
+            </div>
+        </div>
+        <div class="content-wrapper">
+            <div class="sidenav">
+                <a href="#block1">Principles of Computer Design</a>
+
+            </div>
+            <div class="text-wrapper">
+                <div class="module-header">
+                    <h1>Software 3</h1>
+                    <h2>Credits: 10</h2>
+                    <h2><a href="https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/COM00018I/2020-21"> Module Description</a></h2>
+                </div>
+                <div class="module-topics-wrapper">
+                    <div class="list-of-topics">
+                        <h2>Topics:</h2>
+                        <ul>
+                            <li style="color: rgb(0, 255, 98)">Notes on Block 1</li>
+                        </ul>
+                    </div>
+                    <div class="block1">
+                        <h2 id="block1">
+                            Notes on Block 1
+                        </h2>
+                        <h3>Cons (:) vs concatenate (++)</h3>
+                        <p>
+                            Seemingly, : and ++ seem to function the same. However, cons prepends a given item to a list e.g. 5:[] = [5]. 
+                            Conccatenate, on the other hand, adds a list (on the right) to the end of the list (on the left) e.g. [1,2] ++ [3] = [1,2,3]. 
+                            The differences are that cons takes a list element and a list, whereas concatenate takes two lists and joins them together. 
+                        </p>
+                    </div>
+                    <div class="block2">
+                        <h2 id="block2">
+                            Notes on Block 2
+                        </h2>
+                        <h3>Using the function 'filter'</h3>
+                        <p>
+                            If we want to select some elements from a list depending on some condition, we can use 'filter'. Syntax is filter (condition) (list). 
+                        </p>
+                        <h3>Monads</h3>
+                        <p>
+                            A monad is just a monoid in the category of endofunctors, what's the problem?
+                        </p>
+                        <p>
+                            Seriously though, monads are simply a way of performing side effects without destroying the purity of the language. They cleanly seperate 
+                            side-effecting computations with those that don't have side effects, so neither computation interferes with the other.
+                            <br>
+                            <b>Monads are a generalization of functions, function application, and function composition to allow them to deal with richer notions of computation than standard functions.</b>
+                            <br>
+                            An example of a monad is the monadic type and function 'Maybe' and 'maybe'. Monadic values are not intuitive, they are just ways of represnting the output of a monadic function. 
+                            The maybe function can error check at the same time as performing a function (see question 2.2)
+                        </p>
+                    </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
