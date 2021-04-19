@@ -192,32 +192,32 @@
                             More high-level languages are easier to port to other hardware, but they are slower. Emulation allows for OSs to run on non-native hardware.
                         </p>
                         <h3>Operating System Structure</h3>
-                        <h2>Monolithic Structure</h2>
+                        <h4>Monolithic Structure</h4>
                         <p>
                             Original UNIX had a monolithic structure. The OS consists of two seperablwe parts: systems programs and the kernel that consists of everything below the system-call interface and above 
                             the physical hardware. It provides the file system, CPU scheduling etc
                         </p>
-                        <h2>Monolithic + Modular Structure</h2>
+                        <h4>Monolithic + Modular Structure</h4>
                         <p>
                             Linux has this structure, where parts of the OS are sepeated out into modules: applications, system-call interface, device drivers, and hardware
                         </p>
-                        <h2>Layered Apporach</h2>
+                        <h4>Layered Apporach</h4>
                         <p>
                             The OS is divided into a number of layers, that are built on top of lower layers. The bottom layer (layer 0) is the hardware, the highest (N) is the user interface.
                             With modularity, layers are selected such that each uses functions and services of only lower-level layers.
                         </p>
-                        <h2>Microkernels</h2>
+                        <h4>Microkernels</h4>
                         <p>
                             This approach moves as much from the kernel into user space as possible. <b>Mach</b> (that Mac OS kernel, Darwin, is partly based on) is an example of a microkernel OS.
                             Communication takes place between user modules using <b>message passing</b>. Has a number of benefits such as being easier to extend and port, and more reliable.
                             However, there is a performance overhead of user space to kernel space communication.
                         </p>
-                        <h2>Modules</h2>
+                        <h4>Modules</h4>
                         <p>
                             Many modern OSs implement <b>loadable kernel modules (LKMs)</b>. These use an object-oriented approach where each core component is seperate from each other. They talk to each other 
                             over known interfaces and each is loadable as needed within the kernel. Similar to layers but more flexible (Linux uses this, as mentioned earlier)
                         </p>
-                        <h2>Hybrid Systems</h2>
+                        <h4>Hybrid Systems</h4>
                         <p>
                             The majority of modern OSs are not one pure model. Hybrid systems combine multiple approaches to address different needs. Windows is mostly monolithic, but also uses a microkernel apporach for different 
                             subsystem <b>personalities.</b> Apple Mac OS X is a hybrid. It is layered with an Aqua UI, with a kernel below it consisting of Mach microkernel and BSD Unix parts 
@@ -245,17 +245,14 @@
                             Tracing is where we collect data for a specific event, such as steps involved in a system call invocation. The tools include 'strace' - to trace system calls, 'gdb' - a source level debugger,
                             and 'perf' - a collection of Linux performance tools, to name a few.
                         </p>
-                        
-
-
-                        
-                        
                     </div>
                     <div class="processes">
                         <h2 id="process">
                             Processes
                         </h2>
-                        Processes are...
+                        <p>
+
+                        </p>
                     </div>
                     <div class="interprocess-communication">
                         <h2 id="ipc">
