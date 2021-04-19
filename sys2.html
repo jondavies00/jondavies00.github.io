@@ -52,7 +52,7 @@
                     <div class="list-of-topics">
                         <h2>Topics:</h2>
                         <ul>
-                            <li style="color: red">Operating Systems</li>
+                            <li style="color: green">Operating Systems</li>
                             <li style="color: red">Processes</li>
                             <li style="color: red">Interprocess Communication</li>
                             <li style="color: red">Threads</li>
@@ -145,15 +145,111 @@
                         <p>System utilities provide a convenient environment for program development and execution. Some are just interface to system calls (i.e. call a service), whereas as others are more complex.
                             They can be divided into these categories:
                             <ul>
-                                <li>File management</li>
-                                <li>Status information</li>
-                                <li>File modification</li>
+                                <li>File management: allow the user to create, delete, copy, rename, print, dump, list, and generally manipulate files and directories.</li>
+                                <li>Status information: utilities that allow the user to see system info such as date, time, available memory etc. Also for showing performance, logging
+                                    and debugging information.
+                                </li>
+                                <li>File modification: text editors allow creation and mofification of files.</li>
                                 <li>Programming language support (i.e. compilers, assemblers and debuggers)</li>
-                                <li>Program loading and execution</li>
-                                <li>Communications</li>
-                                <li>Background services</li>
+                                <li>Program loading and execution: many different loaders are used, and debugging systems for higher-level and machine language</li>
+                                <li>Communications: allow the mechanism for creating virtual connections among processes, users, and computer systems</li>
+                                <li>Background services: these launch at boot time and provide facilities sucha s disk checking, process scheduling, and error logging</li>
                             </ul>
                         </p>
+                        <h3>Application Programs</h3>
+                        <p>
+                            Operating systems also come with <b>application programs</b> a lot of the time that are useful for solving common problems, but don't pertain to the system.
+                            For example, web browsers or games. These aren't considered part of the OS generally.
+                        </p>    
+
+                        <p>Application prtograms compiled on one OS are not executable on other operating systems. This is because each operating system provides its own set 
+                            of system calls. Sometimes, however, certain applications are available on multiple operating systems. This is for a few reasons:
+                            <ul>
+                                <li>The application can be written in an interpreted language (e.g. Python or Ruby) that has an interpreter available for multiple OSs.</li>
+                                <li>The application can be written in a language that includes a virtual machine containing the running application e.g. Java. Java has an RTE that has been 
+                                    developed for many operating systems, that can run the language on it.
+                                </li>
+                                <li>The application gets portred to each OS it will run on. This can be very time consuming and must be done for each new version.</li>
+                            </ul>
+                        </p>
+                        <p>ABIs (Application Binary Interfaces) can be used to define how different components of binary code can interface for a given OS on a given archtecture. It sepcifices
+                            low level details such as address width, and methods of passing parameters to system calls. They are specified for a given architecture 
+                            and are therefore the architecture-level equivalent of an API. 
+                        </p>
+                        <h3>OS Design and Implementation</h3>
+                        <p>
+                            Design and implementation of OS is not 'solvable' but some approaches are more successful. There are certain 
+                            <b>user goals</b> and <b>system goals</b> that need to be defined beforehand. User goals include OS convenience, how easy it is to learn, its reliableness,
+                            safety and speed. System goals include how easy the OS is to design for, how easy it is to implement and maintain, and how flexible, reliable and error-free it is to do this.
+                        </p>
+                        <p>
+                            We can use a <b>policy</b> and <b>mechanism</b> method of designign OSs. A policy is what needs to be done, and the mechanism is how to do it. The seperation of policy 
+                            from mechanism is important as it allows flexibility if policy decisions are to be changed later.
+                        </p>
+                        <p>
+                            In terms of implementation, there is lots of variation. Early OS's were implemented in assembly language, then system languages like Algol, and now C/C++. 
+                            Usually, they are made of a mix of languages with the lowest in assembly, the main body in C and systems programs in C, C++ and scripting languages such as Python.
+                            More high-level languages are easier to port to other hardware, but they are slower. Emulation allows for OSs to run on non-native hardware.
+                        </p>
+                        <h3>Operating System Structure</h3>
+                        <h2>Monolithic Structure</h2>
+                        <p>
+                            Original UNIX had a monolithic structure. The OS consists of two seperablwe parts: systems programs and the kernel that consists of everything below the system-call interface and above 
+                            the physical hardware. It provides the file system, CPU scheduling etc
+                        </p>
+                        <h2>Monolithic + Modular Structure</h2>
+                        <p>
+                            Linux has this structure, where parts of the OS are sepeated out into modules: applications, system-call interface, device drivers, and hardware
+                        </p>
+                        <h2>Layered Apporach</h2>
+                        <p>
+                            The OS is divided into a number of layers, that are built on top of lower layers. The bottom layer (layer 0) is the hardware, the highest (N) is the user interface.
+                            With modularity, layers are selected such that each uses functions and services of only lower-level layers.
+                        </p>
+                        <h2>Microkernels</h2>
+                        <p>
+                            This approach moves as much from the kernel into user space as possible. <b>Mach</b> (that Mac OS kernel, Darwin, is partly based on) is an example of a microkernel OS.
+                            Communication takes place between user modules using <b>message passing</b>. Has a number of benefits such as being easier to extend and port, and more reliable.
+                            However, there is a performance overhead of user space to kernel space communication.
+                        </p>
+                        <h2>Modules</h2>
+                        <p>
+                            Many modern OSs implement <b>loadable kernel modules (LKMs)</b>. These use an object-oriented approach where each core component is seperate from each other. They talk to each other 
+                            over known interfaces and each is loadable as needed within the kernel. Similar to layers but more flexible (Linux uses this, as mentioned earlier)
+                        </p>
+                        <h2>Hybrid Systems</h2>
+                        <p>
+                            The majority of modern OSs are not one pure model. Hybrid systems combine multiple approaches to address different needs. Windows is mostly monolithic, but also uses a microkernel apporach for different 
+                            subsystem <b>personalities.</b> Apple Mac OS X is a hybrid. It is layered with an Aqua UI, with a kernel below it consisting of Mach microkernel and BSD Unix parts 
+                            as well as dynamically loadable modules.
+
+                        </p>
+                        <h3>System Boot</h3>
+                        <p>When the power is initalised on a system, execution starts at a fixed memory location. The OS must be made available to the hardware so the hardware can start it. A small piece of code 
+                            called the <b>bootstrap loader (BIOS)</b> is stored in the <b>ROM</b>. This locates the kernel and loads it into memory, then starts it. The root file system is then mounted.      
+                        </p>
+                        <h3>OS Debugging</h3>
+                        <p>
+                            Debugging is finding and fixing errors (bugs). It is also called performance tuning. The OS generates <b>log files</b> that contain error information. The failure of an application 
+                            can generate a core dump file, that captures the memory of the process. Failure of the OS itself can generate a crash dump file, containing kernel memory. Performance tuning 
+                            can also optimize system performance. This is done through <b>trace listings</b> of activities that are recorded for analysis, and <b>profiling</b> that periodically samples the instruction 
+                            pointer to look for trends.
+                        </p>
+                        <h2>Performance Tuning</h2>
+                        <p>
+                            In performance tuning, we can improve performance by removinng bottlenecks in the system. This means the OS must provide a means of computing and displaying measures of 
+                            system behaviour. For example, Windows Task Manager.
+                        </p>
+                        <h2>Tracing</h2>
+                        <p>
+                            Tracing is where we collect data for a specific event, such as steps involved in a system call invocation. The tools include 'strace' - to trace system calls, 'gdb' - a source level debugger,
+                            and 'perf' - a collection of Linux performance tools, to name a few.
+                        </p>
+                        
+
+
+                        
+                        
                     </div>
                     <div class="processes">
                         <h2 id="process">
