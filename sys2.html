@@ -235,12 +235,12 @@
                             can also optimize system performance. This is done through <b>trace listings</b> of activities that are recorded for analysis, and <b>profiling</b> that periodically samples the instruction 
                             pointer to look for trends.
                         </p>
-                        <h2>Performance Tuning</h2>
+                        <h4>Performance Tuning</h4>
                         <p>
                             In performance tuning, we can improve performance by removinng bottlenecks in the system. This means the OS must provide a means of computing and displaying measures of 
                             system behaviour. For example, Windows Task Manager.
                         </p>
-                        <h2>Tracing</h2>
+                        <h4>Tracing</h4>
                         <p>
                             Tracing is where we collect data for a specific event, such as steps involved in a system call invocation. The tools include 'strace' - to trace system calls, 'gdb' - a source level debugger,
                             and 'perf' - a collection of Linux performance tools, to name a few.
@@ -250,8 +250,46 @@
                         <h2 id="process">
                             Processes
                         </h2>
+                        <h3>What is a Process?</h3>
                         <p>
-
+                            Processes are <b>programs in exeuction.</b> The execution of a process must progress in sequential fashion. There can therefore be no parallel execution of instructions of a single process.
+                            An operating system executes a variety of programs that run as processes. Programs are static, whereas a process is dynamic (a program in execution). 
+                        </p>
+                        <p> 
+                            Processes have multiple parts:
+                            <ul>
+                                <li>The program code, also called the <b>text section.</b></li>
+                                <li>Current activity including <b>program counter</b> and processor registers.</li>
+                                <li>A <b>stack</b> containing temporary data such as function parameters, return addresses and local variables.</li>
+                                <li>The <b>data section</b> containing global variables.</li>
+                                <li>The <b>heap</b> containing memory dynamically allocated during run time.</li>
+                            </ul>
+                            A program becomes a process when an executable file is loaded into memory. One program can be multiple processes.
+                        </p>
+                        <p>
+                            As a process executes, it changes <b>state:</b>
+                            <ul>
+                                <li>New: the process is being created</li>
+                                <li>Running: instructions are being executed</li>
+                                <li>Waiting: the process is waiting for some event to occur</li>
+                                <li>Ready: the process is waiting to be assigned to a processor</li>
+                                <li>Terminated: the process has finished exeuction</li>
+                            </ul>
+                            It can be shown in a process flow diagram:
+                        </p>
+                        <img src="images/degree-pictures/process-flow.PNG"> 
+                        <h3>Process Control Block</h3>
+                        <p>
+                            When a process is created, a process control block is created for that process that contains the information associated with it. For example:
+                            <ul>
+                                <li>Process state: running/waiting etc</li>
+                                <li>Program counter: the location of instructions to next execute</li>
+                                <li>CPU registers: contents of all process-centric registers</li>
+                                <li>CPU scheduling information: priorities, scheduling queue pointers</li>
+                                <li>Memory-management information: the memory allocated to the process</li>
+                                <li>Accounting information: e.g. CPU used, clock time elapsed etc</li>
+                                <li>I/O status information: I/O devices allocated to process etc</li>
+                            </ul>
                         </p>
                     </div>
                     <div class="interprocess-communication">
