@@ -291,12 +291,98 @@
                                 <li>I/O status information: I/O devices allocated to process etc</li>
                             </ul>
                         </p>
+                        <h3>Threads</h3>
+                        <p>
+                            Multiple program counters per process would mean that multiple locations can execute at once. Essentially it means multiple <b>threads</b> of control. 
+                            It would also mean that the PCB would need to store these multiple program counters.
+                        </p>
+                        <h3>Process Scheduling</h3>
+                        <p>
+                            The process scheduler selects between multiple processes for the next exeuction on a CPU core. The goal is to maximize CPU usage. It maintains scheduling queues
+                            of processes. There is a <b>ready queue</b> with processes in main memory, waiting to execute, and a <b>wait queue</b> where processes are waiting for some event.
+                            Processes will migrate across the various queues.
+                        </p>
+                        <h3>Context Switching</h3>
+                        <p>
+                            When the CPU switches to another process, the system must <b>save the state</b> of the old process and load the saved state for the new one via a <b>context switch</b>.
+                            The context of a process is represented in the PCB. 
+                        </p>
+                        <p>
+                            The OS must provide the mechanisms for process creation and termination. 
+                        </p>
+                        <h3>Process Creation</h3>
+                        <p>
+                            To create a process, a <b>parent</b> process must create a <b>child</b> process, which then create their own processes. This creates a <b>process tree</b>. 
+                            Processes are generally identified and managed via a <b>pid</b> (process identifier)
+                        </p>
+                        <p>There are multiple options for processes sharing resources. They can either share all, some or none. There are also mutliple process execution options. Parents 
+                            and children can execute concurrently, or the parent can wait for the child process to terminate.
+                        </p>
+                        <p>
+                            For example, the C functions  fork() and exec() allow process creation. A parent process could call 'fork()', creating a new duplicate process (the child) that 
+                            could run 'exec()' to replace the process' memory space with a new program. Meanwhile the parent process waits for the child to terminate. It can do this by checking 
+                            the pid.
+                        </p>
+                        <img src="images/degree-pictures/fork-exec.PNG">
+                        <h3>Process Termination</h3>
+                        <p>
+                            Processes exeucte their last statement and then ask the OS to delete them with the 'exit()' system call. The status is returned from child to parent with 'wait()'
+                            and the resources are automatically deallocated. 
+                        </p>
+                        <p>
+                            Parent processes can call 'abort()' to terminate child processes, in case the child has exceeded allocated resources, or the task is no longer required.
+                            Also, an OS may not allow child processes to continue if the parent ones stop. Therefore, if a parent process terminates, all of its children must do so as well. 
+                            This is called <b>cascading termination</b>, initiated by the OS. 
+                        </p>
+                        <p>
+                            The wait() call returns the status information and pid of the terminated process. If no parent process invokes 'wait()' then the child process is a <b>zombie.</b>
+                            If a parent process terminates without invoking 'wait()', the child is an <b>orphan.</b>
+                        </p>
                     </div>
                     <div class="interprocess-communication">
                         <h2 id="ipc">
                             Interprocess Communication
                         </h2>
-                        Interprocess communication is...
+                        <p>
+                            Processes in a system can be independent or cooperating. Processes may need to cooperate to share information, speedup computations, for modularity, or for convenience.
+                            Cooperating processes need <b>interprocess communication</b>. There are two models of IPC:
+                            <ul>
+                                <li>Shared memory</li>
+                                <li>Message passing</li>
+                            </ul>
+                        </p>
+                        <h3>Producer-consumer problem</h3>
+                        <p>
+                            The paradigm for coopearting processes is in terms of a producer and a consumer. The producer process <em>produces</em> data that is <em>consumed</em>
+                            by the consumer process. 
+                            There are two variations:
+                            <ul>
+                                <li><b>unbounded buffer:</b> no practical limit on size of buffer. This means that the producer never waits, and the consumer waits when there is no buffer to consume.</li>
+                                <li><b>bounded buffer:</b> assumes there is a fixed buffer size. The producer must wait if all buffers are full, and the consumer still waits if there is no buffer 
+                                to consume.</li>
+                            </ul>
+                        </p>
+                        <h3>Shared memory</h3>
+                        <p>
+                            Shared memory is where there is an area of memory among proccess that wish to communicate. The communication is under control of the user processes, and not the OS.
+                            The issues are that actions from user processes will need to be synchronized when accessing shared memory. 
+                        </p>
+                        <h3>Message passing</h3>
+                        <p>
+                            Here, processes communicate with each other without resorting to shared variables. The IPC facility provides two operations:
+                            <ul>
+                                <li>send(message)</li>
+                                <li>recieve(message)</li>
+                            </ul>
+                            Message size can be fixed or variable.
+                        </p>
+                        <p>
+                            For two processes wishing to communicate, a <b>communication link</b> must be established between them. Messages are then exchanged through send/recieve. There are 
+                            implemenetation issues in things like how links are established, how many processes can link, how many links can there be between processes, and capacity of links. 
+                        </p>
+                        <p>
+                            Physical implementations 
+                        </p>
                     </div>
                     <div class="threads">
                         <h2 id="thread">
