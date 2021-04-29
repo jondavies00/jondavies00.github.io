@@ -40,6 +40,7 @@
                 <a href="#deadlock">Deadlock</a>
                 <a href="#memory-mgmt">Memory Management</a>
                 <a href="#io-storage-mgmt">IO Storage Management</a>
+                <a href="#io-storage-mgmt">File Management</a>
                 
             </div>
             <div class="text-wrapper">
@@ -53,14 +54,15 @@
                         <h2>Topics:</h2>
                         <ul>
                             <li style="color: green">Operating Systems</li>
-                            <li style="color: red">Processes</li>
-                            <li style="color: red">Interprocess Communication</li>
-                            <li style="color: red">Threads</li>
+                            <li style="color: green">Processes</li>
+                            <li style="color: green">Interprocess Communication</li>
+                            <li style="color: rgb(196, 134, 0)">Threads</li>
                             <li style="color: red">Process Scheduling</li>
                             <li style="color: red">Synchronisation</li>
                             <li style="color: green">Deadlock</li>
-                            <li style="color: red">Memory Management</li>
-                            <li style="color: red">IO Storage Management</li>
+                            <li style="color: green">Memory Management</li>
+                            <li style="color: green">IO Storage Management</li>
+                            <li style="color: red">File Management</li>
                         </ul>
                     </div>
                     <div class="operating-systems">
@@ -381,8 +383,57 @@
                             implemenetation issues in things like how links are established, how many processes can link, how many links can there be between processes, and capacity of links. 
                         </p>
                         <p>
-                            Physical implementations 
+                            Logically, communication links can be implemented through direct or indirect communication:
+                            <ul>
+                                <li>
+                                    <b>Direct communication:</b> this is where processes must name each other explicitly, in the send and recieve commands. Links are established automatically,, and a link is 
+                                    assoicated with exactly one pair of processes. There is exactly one link, and it may be unidirectional, but usually bi-directional.
+                                </li>
+                                <li>
+                                    <b>Indirect communication:</b> this is where messages are directed and recieved from <b>mailboxes</b>, or ports. Each one has a unique id, and processes can communicate 
+                                    only if they share a mailbox. Here, a link is established only if processes share a common mailbox. A link may be associated with many processes, and each pair of processes 
+                                    can have multiple communication links. Links may be unidirectional or bi-directional.
+                                    <br>
+                                    The operations that can happen in indirect communication include the creation of new mailboxes, sending and recieving message through the mailbox, and the deletion 
+                                    of a mailbox. The send and recieve operations will name the mailbox, instead of a process.
+                                    <br>
+                                    Problems could arise when there are multiple recievers of a mailbox. Who will get the message when two processes issue a recieve command 
+                                    at the same time? Solutions could include allowing a link to be associated with at most two processes, or to allow only one process at a time to 
+                                    execute a reccieve operation. 
+                                </li>
+                            </ul>
+                            <h4>Synchronization</h4>
+                            <p>
+                                Message passing may be either blocking or non-blocking:
+                                <ul>
+                                    <li>
+                                        <b>Blocking</b> is considered <b>synchronous.</b> A blocking send will block the sender from sending more messages until the message is recieved.
+                                        A blocking recieve will block the reciever from recieving more messages until one is available. 
+                                    </li>
+                                    <li>
+                                        <b>None-blocing</b> is considered <b>asynchronous.</b> A non-blocking send allows the sender to send a message and continue sending more. A non-blocking 
+                                        recieve will mean the reciever can recieve messages whenever it wants, and may recieve a null message if none are available.
+                                    </li>
+                                </ul>
+                                Different combinations of these are possible. If both send and recieve are blocking, it is called a <b>rendezvous.</b>
+                            </p>
+                            <h4>Pipes</h4>
+                            <p>
+                                Pipes act as a conduit, allowing two processes to communicate.
+                                There are two types:
+                                <ul>
+                                    <li>
+                                        <b>Ordinary pipes</b>. These cannot be accessed fromm outside the process that created it. Typically, a parent process creates a pipe and uses it to communicate 
+                                        with a child process that it created. These allow communication in a standard produer-consumer style. The producer writes to one end of the pipe, the <b>write-end</b>
+                                        and the consumer reads from the other end (the <b>read-end</b>). They are called <b>anonymous pipes</b> in Windows.
+                                    </li>
+                                    <li>
+                                        <b>Named pipes.</b> These can be accessed <em>without</em> a parent-child relationship. These are therefore mmore powerful, as communication is bi-directional.
+                                    </li>
+                                </ul>
+                            </p>
                         </p>
+
                     </div>
                     <div class="threads">
                         <h2 id="thread">
@@ -637,8 +688,8 @@
                         </p>
                         <h3>Address Space</h3>
                         <p>
-                            A (logical) address space is a range of addresses that an OS makes availible to a process. The OS enforces meemory protection.
-                            That is, a process can only read and write witihn its address space. We must therefore seperate memory spaces which we do by
+                            A (logical) address space is a range of addresses that an OS makes available to a process. The OS enforces memory protection.
+                            That is, a process can only read and write within its address space. We must therefore seperate memory spaces which we do by
                             providing a range of legal addresses that the process may access. This is done through two registers, a base and a limit.
                             The <b>base register</b> holds the smallest legal physical memory address, and the <b>limit register</b> sepcifices the size
                             of the range. For example, if the base registers holds 300040 and the limit register is 120900, then the program ccan legally
@@ -646,7 +697,7 @@
                             
 
                         </p>
-                        <img src="images/degree-pictures/base-limit-registers.png">
+                        <img src="images/degree-pictures/base-limit-registers.png"style="width:50%; height:50%;">
                         <p>
                             It is the CPUs job to check that every memory access generated in user mode is between the base and the base+limit for that
                             process.
@@ -677,13 +728,355 @@
                                 </li>
                             </ul>
                         </p>
-                        <img src="images/degree-pictures/program-loading.png">
+                        <img src="images/degree-pictures/program-loading.png"style="width:50%; height:50%;">
+                        <h3>Memory Management Unit</h3>
+                        <p>
+                            The Memory Management Unit (MMU) is a hardware device that, at runtime, maps logical addresses to physical addresses. The CPU will spit out a 
+                            logical address, and the MMU will take that and give a physical address that can be used in physical memory by the OS.
+                            The user program deals with logical addresses and will never see the real physical address. 
+                            There are many ways to do these bindings, and have been worked on over time and became more and more complex.
+                        </p>
+                        <h3>Memory Management Methods</h3>
+                        <h4>Contiguous Memory</h4>
+                            A basic way of doing memory management is through 
+                            <div class="tooltip">contiguous
+                                <span class="tooltiptext"> This means 'in sequence' or 'next to each other'.</span>
+                            </div> 
+                            memory. This was where every job had access to the whole of the memory. This had advantages of being simple and a trivial address resolution. However,
+                            the problems faced were numerous: only one job can run at a time, and the CPU was unused during I/O operations. Therefore there was no support for 
+                            multi-programming (parallel processing).
+                        <h4>Fixed Contiguous Partitions</h4>
+                        <p>
+                            This is where The OS assigns one partition per process, where the size of the partitions are defined at boot-up time and never change.
+                            This way, there is protection against memory intrusion. The OS must be allocated its own partition. When a new process is started, the OS 
+                            has to:
+                            <ul>
+                                <li>Determine the relevant partition</li>
+                                <li>Determine the start address within the active partition</li>
+                                <li>Resolve address: physical address = issued address + fixed base register</li>
+                            </ul>
+                            The problem is that it is hard to choose the correct partition sizes, and processes may require less space than available partitions. This is called fragmentation.
+                            Lots of small jobs will prevent processes from being able to be ran, despite there being enough memory.
+                        </p>
+                        <h4>Dynamic Contiguous Partitions</h4>
+                        <p>
+                            To solve the problems of fragmentation, dynamic contiguous partitions were introduced. This is where partition size is dynamically selected when a job is loaded.
+                            Addresses get resolved through a variable base register, instead of a fixed one (physical address = issued address + variable base register).
+                            This alleviates the previous problems, however does not solve them completely. 
+                            <br>
+                            It introduces external fragmentation (as opposed to internal previously encountered). The OS must keep track of free partitions.
+                        </p>
+                        <img src="images/degree-pictures/external-fragmentation.PNG">
+                        <p>
+                            Here you can see that there are two free partitions in the memory, however a process that requests memory that is bigger than both partitions (but not bigger than
+                            them combined) will not be allowed to run. This is because whilst there is available memory, it is in different partitions.
+                        </p>
+                        <h5>Partition allocation problem</h5>
+                        <p>
+                            If we want to satisfy a request of size <em>n</em> from a list of free partitions, there are a number of ways we can go about it:
+                            <ul>
+                                <li><b>First-fit</b>: allocate the first partition that is big enough</li>
+                                <li>
+                                    <b>Best-fit</b>: allocate the smallest partition that is big enough. This means the entire list of partitions must be searched, unless
+                                    we maintain an ordered list.
+                                </li>
+                                <li><b>Worst-fit</b>: allocate the largest partition. The list must also be searched here.</li>
+                            </ul>
+                            There is no clear winner as the performance of each one depends on the request patterns.
+                        </p>
+                        <p>
+                            External fragmentation can be mitigated by a compaction (or defragmentation) procedure. This requiores relocatable partitions, where the base 
+                            register needs to be changed. The compaction alogirhm needs spare memory space to operate efficiently, as it moves small partitions out of the way 
+                            before relocating large partitions. Compaction can not be performed whilst I/O is in progress involving memory that is being compacted.
+                        </p>
+                        <p>
+                            As shown here, in the CPU there will be a relocation register, so logical addresses will be unchanged. The OS will apply the relocation 
+                            though, and change the relocation register if the partition is moved elsewhere.
+                        </p>
+                        <img src="images/degree-pictures/relocation-register.PNG">
+                        <h5>DCP - Swapping</h5>
+                        <p>
+                            A process can be <b>swapped</b> temmporarily out of memory to a backing store, and then brough back into memory for continued execution. This is done
+                            because the total physical memory space of processes may actually exceed physical memory.
+                        </p>
+                        <p>
+                            A <b>backing store</b> is a fast disk, large nough to accommodate binaries of all processes. A major part of swap time is transfer time, which is directly 
+                            proportional to the amount of memory swapped.
+                        </p>
+                        <p>
+                            Context switching time will include swapping if the next processes to be put on the CPU are not in memory. Therefore the context switch time 
+                            will be very large. If we are swapping out a 100MB process and our hard disk has a transfer rate of 50MB/sec then there will be a swap out time of 2
+                            seconds. This will be 4 seconds as we need to swap in a process of the same size.
+                        </p>
+                        <h4>Paging</h4>
+                        <p>
+                            The physical address space of a process can be noncontiguous: the process is allocated physical memory whenever it is available.
+                            This avoids external fragmentation and the problem of having varying sized memory chunks.
+                        </p>
+                        <p>
+                            Essentially, the physical memory is divided into fixed-size blocks called frames, and the logical memory is divided into blocks of of the same size called pages.
+                            Interal fragmentation is still a minor issue here.
+                        </p>
+                        <p>
+                            The OS must do a few things to manage paging. It must:
+                            <ul>
+                                <li>keep track of all free frames in memory</li>
+                                <li>ensure that to run a program of size N pages it needs to find N free frames to load the program</li>
+                                <li>
+                                    set up a page table to translate logical to physical addresses, which is kept in memory:
+                                    <ul>
+                                        <li>Page-table base register (PTBR) points to the page table</li>
+                                        <li>Page-table length register (PTLR) indicates the size of the page table</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            Therefore, there is significant overhead.
+                        </p>
+                        <h5>Address Resolution in Paging</h5>
+                        <p>
+                            If the logical address space is 2<sup>m</sup> and the page size is 2<sup>n</sup> then the address generated by the CPU is divided into:
+                            <ul>
+                                <li>Page number (p) which is used as an index into a page table which contains the base address of each page in physical memory.
+                                    The size of p is "m-n" bits
+                                </li>
+                                <li>
+                                    Page offset (d) which is combined with the base address to define the physical memory address that is sent to the memory unit. The size 
+                                    of d is "n" bits.
+                                </li>
+
+                            </ul> 
+                        </p>
+                        <p>The diagram below shows how given p and d, a physical memory address can be resolved:</p>
+                        <img src="images/degree-pictures/paging-address-resolution.PNG" style="width:50%; height:50%">
+                        <p>Below is a badly drawn example of resolving an address when p=2 and d=2</p>
+                        <img src="images/degree-pictures/page-resolution.PNG" style="width:50%; height:50%">
+                        <p>
+                            Another example below shows paging resolution when there are 4 bytes per page. In our logical memory '0' refers to the bytes abcd, in our page table, it refers
+                            to '5' (the fifth page in our physical memory).
+                        </p>
+                        <img src="images/degree-pictures/paging-resolution-example.PNG">
+                        <h5>Internal fragmentation in paging</h5>
+                        <p>
+                            There will be minor interal fragmentation in paging. This is because if a process requires an amount of memory that x pages can be used for, but 
+                            the last page still has some free leftover memory then there is memory not being used. For example, a process requires 72,766 bytes. The page size is 
+                            2048. Therefore there can be 35 pages of 2048 bytes plus 1 page of 1086. This leaves 962 (2048 - 1086) free bytes on the 36th page - internal fragmentation.
+
+                        </p>
+                        <p>
+                            The worst case fragmentation will be 1 frame - 1 byte. On average it is 0.5 * frame size, however.
+                            There is a performance trade-off with changing the page size. Reducing the page size minimizes internal fragmentation, but increasing it means there 
+                            will be less pages needed, reducing the page table size and allowing a faster and simpler implementation of memory management.
+                        </p>    
+                        <h5>Performance issues in paging</h5>
+                        <p>
+                            If the page table is kept in main memory then ever data/instruction access requires two memory accesses (one for the page table and one for the data/instruction).
+                            This problem can be solved by the use of a special fast-lookup hardware cache called <b>associative memory</b>, or a <b>translation look-aside buffers</b> (TLBs). 
+                            The most common page/frames willl be stored here for quick access. 
+                        </p>
+                        <p>
+                            The TLB is typically small (64 to 1024 entries). On a TLB miss (i.e. value not in the table), the value of the missed page-table and frame-number is loaded into 
+                            the TLB for faster access next time that address is used. If there is no free TLB entry, replacement policies must be considered. 
+                            Some entries can also be 'wired down' for permanent fast access.
+                        </p>
+                        <h4>Shared Pages</h4>
+                        <p>
+                            Shared pages are essentially shared code. One copy of read-only (reentrant) code is shared among processes (e.g. text editors, compilers, or window systems).
+                            This is similar to multiple threads sharing the same process space. It is also useful for IPC if sharing of read-write pages is allowed. It eliminates the need
+                            of replicating code in memory, as nothing is being written.
+                        </p>
+                        <p>
+                            Code and data is kept private though, as each process keeps a seprate copy of the code and data.
+                        </p>
+                        <p>
+                            Memory strucures for paging can get huge using straight-forward methods. For example, a 32-bit logical address space and a page size of 1KB (2<sup>10</sup>) would give
+                            a page table of 4 million entries (2<sup>32</sup> / 2<sup>10</sup>). If each entry is 4 bytes, the page table is of size 16MB.
+                            This can be costly, and we may not be able to allocate this contiguously in main memory
+                            There are some solutions to this, such as exploiting hierarchy.
+                        </p>
+                        <h5>Hierarchical Page Tables</h5>
+                        <p>
+                            Here, we break up the logical address space into multiple page tables, such as a two-level page table. We then page the page table. 
+                            As always, there is a trade-off. More layers means more time going through memory.
+                        </p>
+                        <img src="images/degree-pictures/page-table-hierarchy.PNG">
+                        <p>
+                            The page number will be divided into two numbers, for two page tables.
+                        </p>
+                        <img src="images/degree-pictures/hierarchical-page-tables.PNG" style="height:50%; width:50%">
+                         <p>The ARM architecture is an example of one that uses a hierarchical page table structure.</p>
                     </div>
                     <div class="io-storage-management">
                         <h2 id="io-storage-mgmt">
                             I/O Storage Management
                         </h2>
-                        I/O Storage Management is...
+                        <h3>I/O Management</h3>
+                        <p>
+                            The I/O subsystem is responsible for controlling all of the devices connected to a computer. It must:
+                            <ul>
+                                <li>Provide processes with a sufficiently simple interface</li>
+                                <li>Take device characteristics into account to maximise performance and efficiency</li>
+                            </ul>
+                            There is a large variety of I/O devices such as storage (disk drives, non-volatile memory), communications (ethernet, wifi, bluetooth), and user interface (mouse, touch, keyboard, display, sound etc)
+                        </p>
+                        <h3>Device Drivers</h3>
+                        <p>
+                            These are low level software that interacts directly with the device hardware. They hide the hardware details from the higher levels of the OS and user applications, and are often developed by the hardware 
+                            vendor. They track the status of the device and enforce access/allocation policies. There are a number of types:
+                            <ul>
+                                <li>Dedicated: each device is allocated to a single process</li>
+                                <li>Shared: each device is shared between multiple processes</li>
+                                <li>Virtual: hides sharing from processes</li>
+                            </ul>
+                        </p>
+                        <h3>Devices</h3>
+                        <p>
+                            Devies usually have registers where the device driver places commands, addresses, and data to write. The devices read data from these registers after command execution.
+                            There are a number of registers (data-in, data-out, status, and control) which are usually 1-4 bytes of fixed size, or a FIFO buffer.
+                        </p>
+                        <p>
+                            Devices have addresses that are used by:
+                            <ul>
+                                <li>Direct I/O instructions</li>
+                                <li>Memory mapped I/O: the device data and command registers are mapped to the processor address space</li>
+                            </ul>
+                        </p>
+                        <p>
+                            The I/O subsystem provides interfaces to access devices via the drivers. There are a number of communication mechanisms:
+                            <ul>
+                                <li>Polling and interrupts</li>
+                                <li>Direct memory access (DMA)</li>
+                                <li>Buffering</li>
+                            </ul>
+                        </p>
+                        <h3>Polling</h3>
+                        <p>
+                            The CPU constantly 'polls' for the busy bit. For each byte of I/O: 
+                            <ol>
+                                <li>Read busy bit from status register until 0</li>
+                                <li>Host sets the read or write bit and if write copies data into data-out register</li>
+                                <li>Host sets command-ready bit</li>
+                                <li>Controller sets busy bit, executes transfer</li>
+                                <li>Controller clears busy bit, error bit, command-ready bit when trasnfer done</li>
+                            </ol>
+                            Step 1 is a busy-wait cycle to wait for I/O from device. This is reasonable if the device is fast, but inefficient if slow. The CPCU could switch to other tasks, but if a cycle is missed then 
+                            data could be overwritten/lost. A way to prevent this is through <b>interrupts</b>.
+                        </p>
+                        <h4>Interrupts</h4>
+                        <p>
+                            Polling can happen in <b>3</b> exeuction cycles: read status, extract status bit, and branch if not zero. This can be more efficient if the bit is infrequently non-zero.
+                        </p>
+                        <p>
+                            The CPU interrupt-request line can be triggered by an I/O device. It is checked by the processor after each instruction. The interrupt handler recieves the interrupts, and is able to 
+                            ignore or delay some interrupts. An interrupt vector disptaches an interrupt to the correct handler. A context switch is needed here at the start and the end. We also need to chain interrupts if there 
+                            are more than one devices at the same interrupt number.
+                        </p>
+                        <p>The following diagram shows how interrupts are essentially handled:</p>
+                        <img src="images/degree-pictures/interrupt-handling.PNG" style="width: 75%;height:75">
+                        <p>
+                            Interrupts make more sense when I/O takes longer, because the context switches are expensive.
+
+                        </p>
+                        <h4>DMA</h4>
+                        <p>
+                            DMA, or Direct Memory Access, avoids the inefficiency of interrupts. It is used to avoid programmed I/O for large data movement, but in turn requires a DMA controller.
+                            It bypasses the CPU to trasnfer data directly between the I/O device and memory.
+                        </p>
+                        <p>
+                            The OS writes a DMA command block into memory, which contains:
+                            <ul>
+                                <li>Source and destination addresses</li>
+                                <li>Read or write mode</li>
+                                <li>The count of bytes</li>
+                                <li>The location of the command block written to the DMA controller</li>
+                            </ul>
+                            The DMA controller issues an interrupt when it is ready. The followig diagram shows how it works:
+                        </p>
+                        <img src="images/degree-pictures/DMA-controller.PNG">
+                        <p>
+                            The DMA controller is a master on the system bus, and will compete with the CPU for control of that bus.
+                        </p>
+                        <h3>Storage Devices</h3>
+                        <p>
+                            The hierarchy of storage devices is driven by the performance and volatility of data. Data acess time includes the ready time (time to prepare and set up stroragem edia to read/write data at the appropriate
+                            location, e.g. wind/rewind tape, rotate disk etc). It also includes transfer time: the time to read/write data from the media.
+                        </p>
+                        <p>
+                            Difference devices can impose access latencies at different orders of magnitude. The OS should manag3e each of them appropriately and mediate transfers (e.g. buffering).
+                        </p>
+                        <h4>Teriary Storage</h4>
+                        <p>
+                            Tertiary storage is primarily used for backups and storage of infrequently-used data, and as a transfer medium between systems.
+                            A magnetic tape is an example, with a large capacity (GB to TB) but very slow access time, as tape must be wound and rewound to a position.
+                            However, once in place, it has reasonable transfer rates (>140MB/s)
+                        </p>
+                        <h4>Secondary Storage</h4>
+                        <p>
+                            This is non-volatile, high-capacity storage that supports swapping/paging. This includes magnetic disks (HDDs), SSDs, and Redundant Arrays of Independent Disks (RAIDs).
+                        </p>
+                        <p>
+                            Magnetic disks are made of n disks (with 2n sides), where each side is divided into circular tracks, and each track into sectors. One cyclinder is a set of tracks at the same position on all sides. Access time
+                            is the seek time (disk head movement) + search time (rotational delay) + transfer time.
+                        </p>
+                        <p>
+                            Other non-volatile memory, such as flash memory, have no mechanical components; only a cointroller and NAND-based flash memory integrated circuits. These are more reliable than HDs (no moving parts), can be faster (no 
+                            seek time or latency) and consume less power. They are also therefore more expensive per MB, lower capacity (generally) and may have a shorter lifespan.
+                        </p>
+                        <h4>RAID<h4>
+                        <p>
+                            These are sets of physical disks viewed as a single logic unit by the OS. They allow simultaneous access to multiple drives, which gives increased I/O performance and improved data recovery in case of failure. Data is 
+                            divided into segments called stripes, which are distributed across the disks in the array. RAIDs can be classified as level 0, 1, .., 6 which indicate different approaches to 
+                            data redundancy and error correction methods.
+                        </p>
+                        <h4>RAID 0</h4>
+                        <p>
+                            In RAID 0, data is divided in segments that are stored across the disks in the array. There is a minimum of 2 disks. The read speed-up is proportional to the number of disks in the array, since distinct data can be read from
+                            different disks simultaneously. The write speed-up is also proportional as distinct data can be written to different disks simultaneously.
+                        </p>
+                        <img src="images/degree-pictures/raid0.PNG">
+                        <p>
+                            However, if one disk fails, there is no redundancy, and therefore no fault tolerance. Since reliability is inversely proportional to the number of disks, a RAID 0 will be more 
+                            vulnerable to faults than a single hard disk. Also, the storage space added to the array by each disk is limited to the size of the smallest disk. e.g. if you striped a 120GB disk 
+                            together with a 100GB disk, the capacity will only be 100 + 100 = 200GB.
+                        </p>
+                        <h4>RAID 1</h4>
+                        <p>
+                            RAID 1 has full redundancy (called mirroring) where data is copied in all disks of the array. Like RAID 0, there must be a minimumm of 2 disks. It tolerates faults on up to N-1 disks (i.e. would tolerate 4 faulty disks on a 
+                            5 disk set-up). The read speed-up is proportional to the number of disks in the array, for the same reasons as RAID 0, but there is no write speed-up since writes have to be done on all disks. It also has very low space 
+                            efficiency (1/N).
+                        </p>
+                        <img src="images/degree-pictures/raid1.PNG">
+                        <h4>RAID 2 (3,4)</h4>
+                        <p>
+                            In these levels, there is bit-level striping, dedicated Hamming (7,4) parity where there is four data bits plus three parity bits. There is a minimum of 3 disks, and tolerates fault in just one disk.
+                            These levels are now obsolete, however, as it is more complex than built-in error correction in modern hard disks.
+                        </p>
+                        <h4>RAID 5</h4>
+                        <p>
+                            RAID 5 distributes parity over multiple disks. There must be 3 disks minimum, and tolerates fault in one disk. Writes are costly operations, but it is still widely used.
+                        </p>
+                        <img src="images/degree-pictures/raid5.PNG">
+                        <h4>RAID 6</h4>
+                        <p>
+                            RAID 6 doubly distributes parity, with a minimum of 4 disks and fault tolerance in two. Like RAID 5, it is also widely used (but costly writes still).
+                        </p>
+                        <img src="images/degree-pictures/raid6.PNG">
+                        <h3>Storage Management</h3>
+                        <p>
+                            Multiple requests need to be handled concurrently, for example several programs may request storage operations at the samet time. We therefore need policies for servicing disk requests. An I/O scheduler handles this 
+                            and decides which requests should be next executed, and allows for prioritised requests. Specific devices may require dedicated scheduling policies, for example to minimise seek time in magnetic disks, or avoid redundant 
+                            writes in non-volatile memory. 
+                        </p>
+                        <h4>Disk Management</h4>
+                        <p>
+                            The OS allows for disk formatting on the physical level (using disk sectors and checksums), and the logical level (using directory-trees and mapping free and allocated space). The OS also allows for partitions (logical disks on 
+                            one physical one), a boot block (inital bootable code at a known sector), bad blocks (permanently corrupted blocks), and defragmentation (rearranging sectors used by files to be contiguous).
+                        </p>
+                    </div>
+                    <div class="file-management">
+                        <h2 id="file-mgmt">
+                            File Management
+                        </h2>
+                        File Management is...
                     </div>
                 </div>
                 

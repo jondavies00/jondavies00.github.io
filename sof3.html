@@ -44,14 +44,75 @@
                     <div class="list-of-topics">
                         <h2>Topics:</h2>
                         <ul>
-                            <li style="color: rgb(0, 255, 98)">Notes on Block 1</li>
+                            <li style="color: rgb(255, 166, 0)"> 
+                                Block 1 - Intro to functions
+                                <ul>
+                                    <li>Why functional programming?</li>
+                                    <li>Defining functions</li>
+                                    <li>Thinking recursively</li>
+                                    <li>Haskell type system</li>
+                                    <li >Notes on Block 1</li>
+                                </ul>
+                            </li>
+                            <li style="color: rgb(255, 136, 0)">
+                                Block 2 - Lists and more functions
+                                <ul>
+                                    <li>Lambda calculus</li>
+                                    <li>List comprehension</li>
+                                    <li>Folding lists</li>
+                                    <li>Lazy evaluation</li>
+                                    <li>Notes on Block 2</li>
+                                </ul>
+                            </li>
+                            <li style="color: rgb(255, 0, 0)">
+                                Block 3 - Reasoning and type classes
+                                <ul>
+                                    <li>Reasoning about programs</li>
+                                    <li>Type classes</li>
+                                </ul>
+                            </li>
+                            <li style="color: rgb(255, 0, 0)">
+                                Block 4 - IO & Monads
+                                <ul>
+                                    <li>Effects through monads</li>
+                                    <li>Fresh identifier generation using monads</li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                     <div class="block1">
                         <h2 id="block1">
-                            Notes on Block 1
+                            Block 1 - Intro to functions
                         </h2>
-                        <h3>Cons (:) vs concatenate (++)</h3>
+                        <h3>Why FP?</h3>
+                        There are a number of reasons why functional programming languages excel over regular:
+                        <ol>
+                            <li>
+                                Value Orientation: the language is <b>value-oriented</b> meaning all occurences of a name refer to the same value. This is also called being 
+                                <b>referentially transparent</b>. It means that it's easier to argue about the results of programs, as you can use equational reasoning. It also means that 
+                                it's easy to encode many useful algebraic structures in the libraries, due to the simple mathematical structure.
+                                These languages are also called <b>pure</b> due to the lac of ad hoc side effects.
+                            </li>
+                            <li>
+                                All values are first class: this means that functions themselves are treated like any other value, so functions can have functions arguments and function results.
+                                It means we can easily abstract away computations and computational structures, and instantiate them as necessary, leading to shorter and better structured code.
+                            </li>
+                            <li>
+                                Laziness for better modularity: the language is <b>lazy</b>, which means all functions are 'call-by-need'. It is an evaluation strategy that only evaluates an expression
+                                when it is needed, and only the part that is needed, allowing us to seperate control and data in new ways. Only pure languages can be lazy.
+                            </li>
+                            <li>
+                                Powerful type systems: some languages can optionally have statically decidable type systems. Type systems can protect programmers from a large number of errors, at cost of some 
+                                freedom to the programmer. Functional lanuages have very powerful but flexible type systems. Haskell uses a statically decidable type system, giving lots of 
+                                protection with little loss of freedom.
+                            </li>
+                            <li>
+                                Difference: the feautures of Haskell makes it a very different language to traditionally learned OOP languages. It allows us to have a deeper understanding of programming 
+                                and pprogramming languages, and give us new ways of seeing and solving problems.
+                            </li>
+                        </ol>
+                        <h3>Notes on block 1</h3>
+                        <h4>Cons (:) vs concatenate (++)</h4>
                         <p>
                             Seemingly, : and ++ seem to function the same. However, cons prepends a given item to a list e.g. 5:[] = [5]. 
                             Conccatenate, on the other hand, adds a list (on the right) to the end of the list (on the left) e.g. [1,2] ++ [3] = [1,2,3]. 
@@ -60,13 +121,14 @@
                     </div>
                     <div class="block2">
                         <h2 id="block2">
-                            Notes on Block 2
+                            Block 2 - Lists and more functions
                         </h2>
-                        <h3>Using the function 'filter'</h3>
+                        <h3>Notes on block 2</h3>
+                        <h4>Using the function 'filter'</h4>
                         <p>
                             If we want to select some elements from a list depending on some condition, we can use 'filter'. Syntax is filter (condition) (list). 
                         </p>
-                        <h3>Monads</h3>
+                        <h4>Monads</h4>
                         <p>
                             A monad is just a monoid in the category of endofunctors, what's the problem?
                         </p>
