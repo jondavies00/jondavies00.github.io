@@ -62,7 +62,7 @@
                             <li style="color: green">Deadlock</li>
                             <li style="color: green">Memory Management</li>
                             <li style="color: green">IO Storage Management</li>
-                            <li style="color: red">File Management</li>
+                            <li style="color: green">File Management</li>
                         </ul>
                     </div>
                     <div class="operating-systems">
@@ -1076,7 +1076,135 @@
                         <h2 id="file-mgmt">
                             File Management
                         </h2>
-                        File Management is...
+                        <p>
+                            The file system is one of the most visible parts of an OS, and provides information and mechanisms used to handle files and directories on the disk. It also offers file protection. Some examples are FAT (win), NTFS (win), and ext family (Linux).
+
+                        </p>
+                        <h3>File Concept</h3>
+                        <p>
+                            A file is a logical storage unit: a recipient of information (data or code). Data is non-volatile, and files can be text, binary, object code, executable etc.
+                            Files have attirbutes such as:
+                            <ul>
+                                <li>Name: user friendly tag for the file</li>
+                                <li>Type: used by the OS to distinguish from files of different types</li>
+                                <li>Location: where it is stored and which is its first block</li>
+                                <li>Size: current size in bytes, words, or blocks</li>
+                                <li>Protection: writing/reading/modification permissions</li>
+                                <li>Time + date + user identification</li>
+                            </ul>
+                            File information is kept in the directory.
+                        </p>
+                        <h3>File Operations</h3>
+                        <p>
+                            A file is an abstract data type that can be manipulated by applications. It can be thought of as an array of bytes.
+                            The OS provides an API to operate on files, including functions for:
+                            <ul>
+                                <li>File creation: the OS returns a file handler</li>
+                                <li>Opening and closing files</li>
+                                <li>Reading and writing</li>
+                                <li>Repositioning within a file (e.g. jumping to a new part of the file)</li>
+                                <li>Deleting or restting (clearing a file)</li>
+                            </ul>
+                        </p>
+                        <p>
+                            Some file systems allow for other operations, such as appending, renaming, copying, changing priviledges, and setting files as memory-mapped files.
+                        </p>
+                        <h3>File Types</h3>
+                        <p>
+                            File types help the OS to determine which application can understand the contents of the file. In Unix and Windows, file types correspond to file name extensions e.g. .doc = word document. These are not enforced by the OS. Some OSs have built-in file types 
+                            e.g. old MacOS where there is a seperate resource for each files where it stores file attributes (including type).
+                        </p>
+                        <h3>Internal File Structure</h3>
+                        <p>
+                            Files are stored on devices such as the HD or SSD. They are stored in physical blocks. A HD without file structure is an array of blocks. No more than one file can use an individual block, which will result in internal fragmentation. For example, in Win98, a text 
+                            file with only one character will be stored in a 4Kb block.
+                        </p>
+                        <p>
+                            Remember, blocks are not the same as sectors.
+                        </p>
+                        <h3>Directories</h3>
+                        <p>
+                            A directory is a special file that holds information of other files, and owned by the OS. It provides a name space for file names where all names in the name space must be unique.
+                            Effectively, it maps names to the files themselves. File operations can update directories.
+                        </p>
+                        <p>
+                            There are a number of ways to implement directories:
+                            <ul>
+                                <li>Tree-based directories where there is a root directory + subdirectories. Can use absolute paths (must prefix filename with the sequence of all directories from the root) or relative paths (assumes there is a current directory, for simplicity.
+
+                                </li>
+                                <li>Non tree-based directories where aliasing is used in which multiple names can point to the same file. However you must be careful with deleting or moving files.</li>
+                            </ul>
+                        </p>
+                        <h3>Access Methods</h3>
+                        <p>
+                            Once a file is opened it can be accessed. During opening, a type of access method is selected:
+                            <ul>
+                                <li>Sequential access: the file is processed in order, one record after another. This is used in applications that need to read files from start to end. Writes are often performmed at the end.</li>
+                                <li>Direct access: the file is made up of fixed-length logical records, that can be read or written in any order (non-sequentially).</li>
+                            </ul>
+                        </p>
+                        <h3>Access Control</h3>
+                        <p>
+                            The OS allows for control on whether users/process can access a file, and how they can. The types of access include read, write, execute, traverse, list, rename, and delete.
+                            Usually the permissions on each file are typically given at three levels of privileges: owner, group, and universe (anyone else).
+                            In UNIX, the directory listing is given as r (read) w (write) and x (execute) e.g. drwxrwxrwx = directory (owner,group,world). 
+                        </p>
+                        <h3>Access Granularity</h3>
+                        <p>
+                            Read-write operations are done in units blocks, which can be one or more sectors of storage device. They can be from 32 bytes to 64kb (typically around 4kb).
+                            The OS does the buffering, so writes are not done immediately to the disk. Only when the block is full, file is closed or when there is an explicit synch/flush operation then data is written. 
+                        </p>
+                        <h3>File System Mounting</h3>
+                        <p>
+                            Before a storage device can be used, it should be 'mounted' as part of a file system.
+                            Mounting verifies that the information in the disk is a valid file system. In UNIX, mounting puts the file system as a subdirectory in the global directory tree which allows a distributed directory system. Windows automatically mounts/unmounts removable storage which is 
+                            practical, but not necessarily efficient. Before being removed, a storage device should be unmounted to check that all files are closed and all information is written to the disk (no information is cached).
+                        </p>
+                        <h3>Allocation of Files</h3>
+                        <p>
+                            Files are stored in storage devices as blocks, and there are three main mechanisms to allocate blocks to files:
+                            <ul>
+                                <li>Contiguous allocation</li>
+                                <li>Linked allocation</li>
+                                <li>Indexed allocation</li>
+                            </ul>
+                        </p>
+                        <h4>Contiguous allocation</h4>
+                        <p>
+                            Each file occupies a set of contiguous blocks of the disk. The file handler will need the first block and the number of blocks. The number of disk seeks is therefore minimised, and access to files is very easy. 
+                            However, finding space is more difficult; it suffers similar problems as external memory fragmentation in dynamic partitions i.e. best-fit vs first-fit policies, relocation of files extract
+
+                        </p>
+                        <p>
+                            Aloocating file size is also very difficcult if files are allowed to grow. It is only used for its efficiency.
+                        </p>
+                        <h4>Linked allocation</h4>
+                        <p>
+                            Each file is a linked list of bloccks, where each block contains the block number of the next block in the list.
+                            This allows for blocks to be scattered throughout the disk. The directory holds a pointer to the first annd last block of the disk, which makes reading and accessing the end of the file easier.
+                            Linked allocation makes it very easy to accomodate growing files, however has a major problem: access to the i<sup>th</sup> block requires scanning all blocks from te first one, leading to very poor worst-case access times, and is especially dependent on disk scheduling.
+                            Therefore, it has bad support for direct access. A possible solution would be to group the blocks (contiguously) in clusters.
+                        </p>
+                        <p>
+                            Another problem is reliability - if one block gets damaged then the rest of the file is lost, as we no longer have the link. The FAT  (File Allocation Table) has the same idea as the linked list, but links are stored at the beginning of each partition for the whole disk, as 
+                            opposed to the next block number being stored in the current block. However this runs the risk of the FAT being corrupted.
+                        </p>
+                        <p>The following image shows linked allocation for 3 different files. On the right is how FAT is implemented.</p>
+                        <img src="images/degree-pictures/linked-allocation.PNG">
+                        <h4>Indexed allocation</h4>
+                        <p>
+                            The previous methods do not nicely support direct access. In indexed allocation, the first block of a file (the index block) contains the list of blocks used by the file. This is similar to the paging memory allocation. This makes direct access very easy. Usually, the index 
+                            block is cached to speed up times. However, there is still some wasted space as an additional full block is used for each file. For very large files, an index block can be used and linked.
+                        </p>
+                        <p>
+                            The following image shows how indexed allocation is implemented:
+                        </p>
+                        <img src ="images/degree-pictures/indexed-allocation.PNG">
+                        <h3>Free Block Management</h3>
+                        <p>
+                            When a file needs additional blocks, it needs to use the ones which are free. A good allocation policy results in improved performance. If we allocated a free block that is close the last block on the file we can minimise seek times.
+                        </p>
                     </div>
                 </div>
                 
