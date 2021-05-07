@@ -46,10 +46,17 @@
                     <div class="list-of-topics">
                         <h2>Topics:</h2>
                         <ul>
-                            <li style="color: rgb(0, 255, 0)">Principles of Computer Design</li>
-                            <li style="color: rgb(0, 255, 0)">Introduction to RISC Pipieline</li>
-                            <li style="color: rgb(0, 255, 0)">Pipeline Hazards</li>
-                            <li style="color:rgb(0, 255, 0)">Control Hazards and Branch Prediction</li>
+                            <li style="color: green">Principles of Computer Design</li>
+                            <li style="color: green">Introduction to RISC Pipieline</li>
+                            <li style="color: green">Pipeline Hazards</li>
+                            <li style="color:green">Control Hazards and Branch Prediction</li>
+                            <li style="color:green">Virtual Memory</li>
+                            <li style="color:green">Page Replacement</li>
+                            <li style="color:green">Introduction to Cache Memory</li>
+                            <li style="color:rgb(255, 0, 0)">Block Replacement & Write Strategy</li>
+                            <li style="color:rgb(255, 0, 0)">Cache Optimisation</li>
+                            <li style="color:rgb(255, 0, 0)">Hardware Multithreading</li>
+                            <li style="color:rgb(255, 0, 0)">System Protection and Security</li>
                         </ul>
                     </div>
                     <div class="principles">
@@ -387,6 +394,370 @@
                             We want an optimization on the BTB such that we ahve a zero cycle branch. A large branch-target buffer will mean we can store one or more instructions. 
                             We can add the target instruction into the BTB to deal with the longer decoding time required by the larger buffer.
                             Branch folding can be used to obtain 0-cycle unconditional branches and sometimes 0-cycle conditional branches.
+                        </p>
+                    </div>
+                    <div class = "virtual-memory">
+                        <h2 id="virtual-memory">Virtual Memory</h2>
+                        <h3>Demand Paging</h3>
+                        <p>
+                            A program is permanently stored in a backing store and is swapped in (to main memory) as needed). The backing store is also split into storage units (called blocks) which are the same size as the frame and the pages.
+                            The program ends up with a small set of pages loaded in main-memory; the 'working set'. Programs are executed (more or less) sequentially and coverage of the program is generally small. Many functions of a program are
+                            seldomm used such as error handling routines, mutually exclusive modules, maintenance, etc.
+                        </p>
+                        <p>
+                            The advantage of demand paging is that it allows programs to run that require much more memory than physically available (limited by secondary storage or addressing space)
+                            The requirements are to have a fast second storage device (DMA, which allow writing to memory from a secondary storage device without cpu) and that more decisions must be taken by the OS, such as what happens when all memory is full and a new page is needed, or 
+                            a decision about which page to be replaced.
+                        </p>
+                        <p>
+                            Demand paging is a key enabler of virtual memory.
+                        </p>
+                        <h3>Virtual Memory</h3>
+                        <p>
+                            The idea of virtual memory is to seperate the logical memory from physical memory. THe logical address space can be much larger than the physical (main memory) one, as only part of the program needs to be in main memory for execution,
+                            whilst the rest resides in secondary storage.
+                        </p>
+                        <p>
+                            It enables for performance and resource efficiency, since there is less I/O needed to load or swap processes. It also allows for more efficient process creation.
+                            As shown in the image below, virtual memory is larger than physical, and it is mapped to both main memory and secondary storage. When a page that is not in main memory is requested, the DMA controller will swap it in.
+                        </p>
+                        <img src="images/degree-pictures/virtual-memory.PNG" style="height:50%;width:50%">
+                        <h3>Virtual Address Space</h3>
+                        <p>
+                            The logical address space is usually designed with a stack at the top to start at 'Max' and grown down, where a heap starts at zero and grows 'up'. 
+                            This maximises address space use, with unused address space between the stack and heap. No physical memory will be needed until the heap ors tack grows to a given new page.
+
+                        </p>
+                        <p>
+                            Doing it this way enables sparse address space with holes left for growth, and dynamically linked libraries. System libraries can be shared via a mapping into the virtual address space. Shared memory is done by mapping pages read-write into virtual 
+                            addresss space. Pages can be shared during fork(), speeding process creation.
+                        </p>
+                        <img src="images/degree-pictures/virtual-address-space.PNG">
+                        <h3>Demand Paging Mechanism</h3>
+                        <p>
+                            This is similar to the paging system with swapping. There is a pager: a swapper that deals with pages, and it only loads needed pages. A page is needed when there is a reference to it (a read/write to its address range). An invalid reference will be aborted, and a page 
+                            not in memory, will be brought to memory.
+                        </p>
+                        <p>
+                            When a process is to be swapped in, the pager predicts which pages will be used before the process is swapped out again. Instead of swapping in a whole process, the pager brings into mmemory only its estimate of the working set. The OS must distinguish between the pages
+                            that are in memmory, and the pages that are on the disk. It does this by using a valid-invalid scheme. If a page is needed and is not in the memory, it results in  page fault. The OS needs to detect and load the page into memory from storage without changing the program 
+                            behaviour and without the programmer needing to change any code.
+                        </p>
+                        <p>
+                            In the image below, we can see what a page table looks like with the demand paging mechanism. The valid-invalid bit notes whether the page is in main memory or not.
+                        </p>
+                        <img src="images/degree-pictures/demand-page-table.PNG" style="height:50%;width:50%">
+                        <h4>Handling Page Faults</h4>
+                        <p>
+                            A page fault is an interrupt, where a context switch ensues. The process state is saved, and the OS restarts the instruction that caused the page fault, as the CPU will be in exactly the same state as prior to the memory reference. The OS actions upon a page fault are 
+                            the following:
+                            <ul>
+                                <li>Find a free frame</li>
+                                <li>Swap the page into the frame via a scheduled I/O operation (usually uses a DMA controller)</li>
+                                <li>Reset the tables to indicate the page is now in memmory (set the validation bit = v)</li>
+                                <li>Restart the instruction that caused the page fault</li>
+                            </ul>
+                        </p>
+                        <p>Graphically, the page fault can be represented as the following:</p>
+                        <img src="images/degree-pictures/page-fault-handling.PNG" style="height:50%;width:50%">
+                        <p>
+                            In the extreme case, a process may be started with none of its pages in memory. This means there will be pure demand paging where the OS sets the instruction-pointer to the first instruction of the process which will be non-memory-resident and result in a page fault. This 
+                            will be the same for every other process paging on the first access. 
+                        </p>
+                        <p>
+                            A single instruction can access multiple pages and cause multiple page faults, such as an instruction that adds 2 numbers from memory, and stores the result in mmemory. These numbers way reside in two different pages.
+                        </p>
+                        <h4>Demand Paging Performance</h4>
+                        <p>
+                            To quantify the perforamnce, we can identify three major activities:
+                            <ul>
+                                <li>Servicing the interrupt: a few hundred instructions</li>
+                                <li>Read in the page: lots of time</li>
+                                <li>Restart the process: a few hundred instructions</li>
+                            </ul>
+                            Page fault rate is a number between 0 and 1 where p=0 means no page faults and p=1 means every reference is a fault.
+                            We can then work out <b>Effective Access Time (EAT)</b> <br>
+                            EAT = (1-p) x memory access time + p (page fault overhead + swap page out + swap page in)
+                        </p>
+                        <p>
+                            To optimise the performance, we can allocate a 'swap space' - an area on the secondary storage device that manages swapping, instead of doing it through the file system. Here, swaps are allocated in larger chunks, so less management is needed.
+                            We can also copy entire process images to the swap space at process load time, and page in and out of the swap space.
+                        </p>
+                        <p>
+                            Another way would be to, instead of paging out (i.e. writing back to secondary storage) when we are freeing a frame, if we know that the page was never written to then it can simply be overwritten, which is faster.
+                        </p>
+                        <p>
+                            Another optimisation is Copy-On-Write mechanism. Here, both parent and child processes can initially share the same pages in memory. If either process modifies a shared page, only then is the page copied. This allows mmore efficient process creation, as only modified pages are 
+                            copied. In Linux, the call is a variation on fork() (vfork()) and is very efficient.
+                        </p>
+                        <p>The image below shows that a page (page C) being copied when it needs to be written to by the child process, but pages A and B are kept as shared:</p>
+                        <img src="images/degree-pictures/copy-on-write.PNG" style="height:50%;width:50%">
+                    </div>
+                    <div class="page-replacement">
+                        <h2 id="Page Replacement">
+                            Page Replacement
+                        </h2>
+                        <p>
+                            When the main memory is full, and we need to swap in a page, there needs to be some mechanism to choose which page to replace. There are a number of different replacement policies that are used.
+                            We want a decision-making algoirthm that will result in a minimum number of page faults. We therefore want to minimise pages being brought into memory multiple times, and maximise pages that are used often being kept in memory.
+                            The following iamge shows user needing the page 'B', but the physical memory is full.
+                        </p>
+                        <img src="images/degree-pictures/page-replacement.PNG">
+                        <p>
+                            As talked about in virtual memory, if we only write back pages that have been modified, we can speed-up page replacement. This is done using a modify ('dirty') bit. Only modified pages are written back to disk.
+                            Page replacement ensures we can have a separation between logical memory and physical memory.
+                        </p>
+                        <p>
+                            The page replacement procedure is as follows:
+                            <ol>
+                                <li>Find the location of the desired page on the disk</li>
+                                <li>Find a free frame:
+                                    <ul>
+                                        <li>If there is a free frame, use it</li>
+                                        <li>If there is no free frame, use a <b>page replacement algorithm</b></li>
+                                        <li>Select a victim frame</li>
+                                        <li>Write victim frame to disk if modified (dirty)</li>
+                                    </ul>
+                                </li>
+                                <li>Bring the desired page into the (newly) free frame, and update the page and frame tables</li>
+                                <li>Continue the process by restarting the instruction that caused the trap</li>
+                            </ol>
+                        </p>
+                        <p>
+                            The page-replacement algorithm aims for the lowest page-fault rate on btoh first access and re-access. We can evaluate the algorithm by running it on a particular string of memory references and computing the number of page faults. The string would be
+                            just page numbers, not full addresses, and the results depend on the number of frames available. For the following examples, the <b>reference string</b> of referenced page numbers is:
+                            <br>
+                            <b>7,0,1,2,0,3,0,4,2,3,0,3,0,3,2,1,2,0,1,7,0,1</b>
+                            <br>
+                            This can be read as a process that request page 7, then page 0, then page 1 etc.
+                        </p>
+                        <h3>Page Replacement: FIFO</h3>
+                        <p>
+                            The oldest page that has been located is the one that will be replaced with the FIFO algorithm. So, for the the reference string with 3 frames (meaning 4 pages can be in memory at a time per process) it will look like this:
+                        </p>
+                        <img src="images/degree-pictures/fifo-replacement.PNG">
+                        <p>
+                            We use a FIFO queue implementation to track the ages of pages. As shown, it is not a good algorithm, as there is no way of tracking which apges are used most frequently. With FIFO, a strange thing can happen where increasing frames actually increases page faults
+                            (which you would expect the opposite to happen). This is called Belady's Anomaly. This is very unintuitive and undesired.
+                        </p>
+                        <h3>Page Replacement: Optimal</h3>
+                        <p>
+                            The best page replacement policy would be replacing the page that will not be used for the longest period of time. In our example, this would result in 9 page faults:
+                        </p>
+                        <img src="images/degree-pictures/optimal-page-replacement.PNG">
+                        <p>
+                            Unfortunately, this is only theoretical as we cannot know the future. Therefore this is only used to find the upper-bound of optimisation for comparative evaluation.
+                        </p>
+                        <h3>Pagfe Replacement: LRU (Least Recently Used)</h3>
+                        <p>
+                            Here, we use the past knowledge rather than the future: we replace the page that has not been used for the longest period of time. We must therefore keep track of time of last use for each page
+                        </p>
+                        <img src="images/degree-pictures/lru-page-replacement.PNG">
+                        <p>
+                            This results in 12 faults, which is better than FIFO. This is generally good and widely used, but there are implementation issues.
+                        </p>
+                        <h4>LRU Approximation Algorithms</h4>
+                        <p>These are similar to LRU, but without complex timestamping:
+                            <ul>
+                                <li><b>Reference Bit:</b> we associate a hardware provided bit with each page that is initially 0. When a page is referenced, the associated bit is set to 1. We then replace any page with a reference bit of 0 (if one exists).</li>
+                                <li><b>Second-chance Algorithm:</b> this uses a FIFO scheme, but with the hardware-provided reference bit. If the page to be replaced has a reference bit of 0 then replace it, if it is 1 then we set it 0 and leave it in memory, and replace the next page with the same rules.</li>
+                            </ul>
+                        </p>
+                        <h3>Page and Frame Locking</h3>
+                        <p>
+                            The OS may wish that some pages remain in physical memory frames such as parts of the OS code itself, or I/O buffers. Therefore, we use something called <b>frame locking</b>. If a frame is locked, it cannot be replaced. A lock bit is required for each frame, and this is usually 
+                            supported in the OS rather than the hardware.
+                        </p>
+                        <h3>Frame Allocation</h3>
+                        <p>
+                            A <b>frame allocation algorithm</b> determines how many frames to give each process, and which frames to replace in case of scarcity. Each process needs a <b>minimum</b> amount of frames. The maximum will be the total frames in the system. There are many allocation schemes:
+                            <ul>
+                                <li>Equal allocation</li>
+                                <li>Size-proportional allocation</li>
+                                <li>Priority Allocation</li>
+                            </ul>
+                            It is important to keep a free frame buffer pool.
+                        </p>
+                        <p>
+                            Global replacement is where a process selects a replacement frame from the set of all frames. One process can take a frame from another in this case, meaning that possibly a higher priority process could increase its allocated frames by taking a frame from a low priority process. Therefore the 
+                            page fault behaviour of a process becomes dependent on the behaviour of other process. In this case, there is a greater overall throughput, so this is a common strategy (e.g. for Linux)
+                        </p>
+                        <p>
+                            Local replacement is where each process selects from only its own set of allocated frames. This gives a more consistent per-process performance. If a process does not have a sufficient number of frames alllocated to it, the process will suffer many page faults (called <b>thrashing</b>). It 
+                            also means memory could be underutilized.
+                        </p>
+                        <h3>Thrashing</h3>
+                        <p>
+                            If a process does not have 'enough' pages, the page-fault rate is very high. Because there are no free frames (otherwise they would have been allocated to the faulting process), we have to swap out a frame of another (active) process, and allocate the frame to the faulting process. The page that we
+                            swap out will be needed again, so a page fault will occur, and again there are no free frames. This leads to low CPU utilization and the OS thinking that it needs to increase the degree of multiprogramming (because it sees the CPU is idle), and another process will be added to the system, leading to 
+                            even worse performance. Ultimately, thrashing is when a process is busy swapping pages in and out.
+                        </p>
+                        <p>THe following graph shows how inccreasing multiprogramming increases CPU utilization up to a certain point, until processes start needing to constantly swap pages in and out as there are too many of them:</p>
+                        <img src="images/degree-pictures/thrashing.PNG">
+                        <p>
+                            The <b>locality model</b> is where processes use pages in a certain range of addresses. Processes migrate from one locality to another, and localities may overlop. Thrashing occurs because the total size of a locality is greater than the total memory size. We can limit the effects of thrasing by using 
+                            local page replacement and priority page replacement.
+                        </p>
+                        <h4>Working-Set Model</h4>
+                        <p>
+                            If we define delta to be a working-set window then we can:
+                            <ul>
+                                <li>Analyze the most recent delta page references</li>
+                                <li>If a page is in use, it is in the working set delta</li>
+                                <li>If it is no longer used, it will drop from the working set delta time units after its last reference</li>
+                            </ul>
+                            WSS<sub>i</sub> (the working set of Process P<sub>i</sub>) is defined to be the total number of pages referenced in the window 'delta'. Here is an example with WSS<sub>i</sub> = 10
+                        </p>
+                        <img src="images/degree-pictures/working-set-model.PNG">
+                        <p>
+                            WSS<sub>i</sub> tries to approximate the size of the locality of process P<sub>i</sub>:
+                            <ul>
+                                <li>If delta is too small then it will not encompass the entire locality</li>
+                                <li>If delta is too large then several localities will be encompassed</li>
+                                <li>As delta tends to infinity, it will encompass the entire program</li>
+                            </ul>
+                            We can define <b>D</b> as the sum of all the frames in each working set for each process. It wil be the total demand for frames by all process P<sub>0</sub>...P<sub>n</sub>. If D is greater than the total number of frames we will get thrashing.
+                            Therefore, we can have a policy that states if D > m (the total number of frames), then suspend or swap out one of the processes (reduce multiprogramming).
+                        </p>
+                        <h4>Page-Fault Frequency</h4>
+                        <p>
+                            Alternatively, we can establish an 'acceptable' page-fault frequency (PFF) rate, and use a local replacement policy. If the actual rate is too low, the process loses a frame, if it is too high then the process gains a frame.
+                        </p>
+                    </div>
+                    <div class="intro-cache-memory">
+                        <h2>Introduction to Cache Memory</h2>
+                        <p>
+                            In a RISC pipeline, there is a memory component at the first stage, that is accessed by every instruction for a fetch. The memory access stage also needs to access memory, on a LOAD or STORE instruction.
+                        </p>
+                        <p>
+                            CPUs have seen a very significant improvement in modern years as opposed to DRAM (memory).
+                        </p>
+                        <p>
+                            In the CPU, the memory access componenets interact with the cache, which in turn is supplied from the main memory. In a computer, we can create the illusion of a very large and fast memory. We implement the memory of a computer as a hierarchy, with multiple levels having different speed and sizes.
+                            The entire addressable memory space is availible in the largest and slowest memory, and we keep the smaller and faster memories close the processor.
+                        </p>
+                        <img src="images/degree-pictures/memory-hierarchy.PNG">
+                        <p>
+                            As you can see, there is a hierarchy of memory, and different levels of cache memory.
+                        </p>
+                        <p>
+                            Cache memory is a small, fast buffer between the processor and the main memory. Old values will be removed from the cache to make space for new values. There are a few properties of memory referencing that cache memory takes into account:
+                            <ul>
+                                <li><b>Principle of Locality</b>: programs access a relatively small protion of their address space at any instant of time</li>
+                                <li><p>Temporal locality</p>: if an item is referenced, it will tend to be referenced again soon</li>
+                                <li><b>Spatial locality</b>: if an item is referenced, items whose addresses are close will tend to be referenced sooner</li>
+                            </ul>
+                            Therefore, if the CPU goes to the cache memory for an address, does not find it, and gets it from main memory instead, it will still bring it to the cache. This is because it's likely to be accessed again (temporal locality).
+                            Since nearby addresses will probably be requested in the future, the CPU will also bring adjacent words into the memory (spatial locality).
+                        </p>
+                        <p>
+                            Cache will always transfer words to the cache, whereas the main memory will transfer blocks
+                        </p>
+                        <p>
+                            Key definitions:
+                            <ul>
+                                <li>Block/Line: minimum unit of info that can be either present or not present in a cache level</li>
+                                <li>Hit: an access where the data requested by the processor is present in the cache</li>
+                                <li>Miss: an access where the data requested by the processor is not present in the cache</li>
+                                <li>Hit time: the time to access the cache memory block and return the data to the processor</li>
+                                <li>Hit rate/Miss rate: fraction of memory access found/not found in the cahce</li>
+                                <li>Miss penalty: time to replace a block in the cache and the corresponding block from the next level</li>
+                            </ul>
+                        </p>
+                        <h3>CPU-Cache Interaction</h3>
+                        <p>
+                            The transfer unit between the CPU register file and the cache is a 4-byte word, and the transfer unit between the cache and main memory is a 4-word block (4*8 = 16B). As shown below, the tiny, very fast CPU register has room for only four 4-byte words (the red blocks). The small fast L1 cache has room for
+                            two 4-word blocks. The big and slow main memory has room for many 4-word blocks.
+                        </p>
+                        <img src="images/degree-pictures/cpu-cache-interaction.PNG">
+                        <p>
+                            As shown below, the cache is organised into an array of sets. There are S sets that are rpresented by S<sup>2</sup>.
+                        </p>
+                        <img src="images/degree-pictures/cache-organisation.PNG">
+                        <p>
+                            The cache size is B x E x S bytes. B is the bytes per cache block, E is the lines per set (that hold blocks), and S is the number of sets.
+                        </p>
+                        <p>
+                            If the CPU requests address A then we know the word at address A is in the cache if the tag bits in one the <b>valid</b> lines in the set match the <b>tag</b>. There is also the block offset where the word contents begin from the beginning of the block.
+                        </p>
+                        <h4>Example</h4>
+                        <p>
+                            A cache has a 512KB capacity, 4B words, and a 64B block size. It is 8-way set associative (i.e. 8 blocks per set). The system is using a 32-bit address.
+                            <br>
+                            Given the address 0X ABC89984, which set of cache will be searched? Specify which word of the selected cache block will be forwarded if it is a hit in the cache.
+                        </p>
+                        <p>
+                            Firstly, we want to calculate the number of sets in the cache. We do this by calculating the total size of a single set (64B per block and 8 blocks in a set = 8*64) and divide the total cache size by this. This works out to 2<sup>19</sup> / (2<sup>6</sup> x 2<sup>3</sup>) = 2<sup>10</sup> or 1024 sets.
+                        </p>
+                        <p>
+                            Given the address, we know that 16 bits will be given to the tag. We disregard this, as we assume it is a hit. Then 10 bits are given to the index, and 6 (4 for the word + 2 for the byte) to the offset. Therefore we caluclate using the last 4 hex values of the address: 9984 which comes out as 1001 1001 1000 0100.
+                            Working rom the right, the offset is  0001 00 which comes out as 1 + 0 = word 1 in the set. The set number will be the next 10 bits, or 1001 1001 10 which equals 614. Therefore set 614 will be searched, and word 1 selected.
+                        </p>
+
+                        <br>
+                        <p>
+                            There are essentially four cache memory design choices:
+                            <ul>
+                                <li>Where can a block be placed in the cache? <b>(block placement)</b></li>
+                                <li>How is a block found if its in the upper level? <b>(block identification)</b></li>
+                                <li>Which block should be replaced on a miss? <b>(block replacement)</b></li>
+                                <li>What happens on a write? <b>(write strategy)</b></li>
+                            </ul>
+                        </p>
+                        <p>
+                            In terms of block placement, there are a number of ways to go about it. 'Direct mapped' cache means that an address of 12 in the main memory will go to the set 4 (12 mod 8) of an 8-set cache. However, two addresses than give the same location will not be able to coexist in the cache (e.g. 24 mod 8 and 16 mod 8).
+                            For a 2-way set associative cache, there are 4 sets in an 8-block cache. Therefore we do 12 mod 4, and get 0, meaning we can put the block anywhere in this set. A fully associative cache is where we can keep addresses anywhere in the cache.
+                        </p>
+                        <img src="images/degree-pictures/block-placement.PNG">
+                        <h4>Direct-Mapped Cache</h4>
+                        <p>
+                            This is the simplest kind of cache and easy to build. Only 1 tag compare is required per access, and is chracterized by exactly one line per set.
+                            The cache size is the block size * number of blocks.
+                        </p>
+                        <p>
+                            Set selection is done by the set index bits. To access a set, the valid bit must be equal to 1, and the tag bits inm the cache line must match the tag bits in the address. If 1 and 2 are both true, then it is a cache hit, and we can select the block using the block offset.
+                        </p>
+                        <p>
+                            An associate set is when there is more than one line per set. e.g. 2-set associative is two lines per set
+                        </p>
+                        <h3>Cache Indexing</h3>
+                        <p>
+                            Decoders are used for indexing, and the indexing time depends on the decoder size. If there are less sets, then there is less indexing time.
+                        </p>
+                    </div>
+                    <div class="replacement-write-strategy"> 
+                        <h2>Block Replacement and Write Strategy</h2>
+                        <h3>Block Replacement</h3>
+                        <p>
+                            The cache has finite size, so we need to find a way to replace blocks when it is full. For a direct-mapped cache it is easy, we just replacce what is at the tagged block. With a set associative cache, we need a way of deciding which block should be replaced in the set.
+                            There are many block replacement algorithms:
+                            <ul>
+                                <li>Random</li>
+                                <li>First in First Out (FIFO)</li>
+                                <li>Last in First Out (LIFO)</li>
+                                <li>Least Recently Used (LRU)</li>
+                                <li>Pseduo-LRU (PLRU)</li>
+                                <li>Not Recently Used (NRU)</li>
+                                <li>Re Reference Interval Prediction (RRIP)</li>
+                                <li>Optimal</li>
+                            </ul>
+                        </p>
+                        <h4>Random & FIFO</h4>
+                        <p>
+                            Random policy just needs pseduo-random number generator. FIFO policy evicts the block that has been in the cache the longest. It requires a queue to store references. 
+                        </p>
+                        <h3>Least-Recently Used</h3>
+                        <p>
+                            For associativity = 2, LRU is equivalent to NMRU. We assign a bit as an LRU bit that indicates whether the block was recently used or not. For associativty greater than 2 (a > 2), it's more complicated as there are a number of ways to implement it. We could record timestamps,
+                            or use multiple LRU bits.
+                        </p>
+                        <p>
+                            The implementation is shown in the image below. When there is a hit on CL 0, 0 becommes the most recently used, and the others are shifted upwards. This is the same for a hit with 4, and 7. When there is a miss, we replace CL6 as it is the least recently used, and make it the most recently used.
+                        </p>
+                        <img src="images/degree-pictures/LRU-implementation.PNG">
+                        <h3>Optimal Replacement Policy</h3>
+                        <p>
+                            We evict the block with the longest reuse distance. This means the block that has the next reference farthest in the future. Obviously this requires knowledge of the future, so is only useful for modelling. 
                         </p>
                     </div>
             </div>
