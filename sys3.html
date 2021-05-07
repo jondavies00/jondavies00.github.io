@@ -759,7 +759,41 @@
                         <p>
                             We evict the block with the longest reuse distance. This means the block that has the next reference farthest in the future. Obviously this requires knowledge of the future, so is only useful for modelling. 
                         </p>
+                        <h3>Pseudo-LRU Implementation</h3>
+                        <p>
+                            Rather than true LRU, we use a binary tree. Each node records which half is older/newer and we update nodes on each reference. To find the LRU victim, we follow older pointers.
+                        </p>
+                        <img src="images/degree-pictures/pseudo-lru.PNG">
+                        <p>
+                            Zero means that the upper-half is older, and the lower half is newer. One means the lower-half is older. Therefore 'B' is the LRU.
+                        </p>
+                        <h3>Not Recently Used (NRU)</h3>
+                        <p>
+                            Here we keep a NRU state in 1 bit/block. The bit is reset to 0 when installed/re-referenced. The bit is set to 1 when it is not referenced and another block in the same set is referenced. Evictions will then favour NRU=1 blocks. If all blocks are NRU=0/1 then it picks randomly.
+                        </p>
+                        <p>
+                            This algorithm provides some scan and trash resistance. It randomizes evicctions a bit rather than a strict LRU order.
+                        </p>
+                        <h3>Re-reference Interval Prediction (RRIP)</h3>
+                        <p>
+                            This extends the NRU to multiple bits. The bit starts with a middle value and on a hit, gets promoted. Over time, the bit gets demoted. Therefore it can predict near-immediate, intermediate, and distant re-references quite well. For example, 0000 would indicate a very lightly used block 
+                            and 1111 would indicate a very heavily used block. The bit value that a block would start with would be 8 (1000)
+                        </p>
+                        <h3>Least Frequently Used (LFU)</h3>
+                        <p>
+                            Here, there is a counter per block that gets incremented on a reference. Evictions will then choose the block with the lowest count. There is a storage overhead. If it uses 1-bit per block then it is the same as NRU. 
+                        </p>
+                        <h3>Look-aside cache vs Look-through cache</h3>
+                        <p>
+                            A <b>look-aside</b> cache request from the processor will go to the cache and main memory in parallel. Cache and main memory both see the bus cycle: a cache miss will not need to trigger main memmory. If the processor is loaded from the cache then the bus cycle terminates, otherwise the 
+                            processor and cache will both be loaded from main memory in parallel.
+                        </p>
+                        <p>
+                            A <b>look-through cache</b> will first check the cache when the processor requests data from memory. On a cache hit, the data will be loaded from cache, on a miss the cache will be loaded from memory first, then the processor will be loaded from the cache.
+                        </p>
+                        <h3>Write Strategy</h3>
                     </div>
+
             </div>
 
         </div>
