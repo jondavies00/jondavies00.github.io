@@ -53,10 +53,10 @@
                             <li style="color:green">Virtual Memory</li>
                             <li style="color:green">Page Replacement</li>
                             <li style="color:green">Introduction to Cache Memory</li>
-                            <li style="color:rgb(255, 0, 0)">Block Replacement & Write Strategy</li>
-                            <li style="color:rgb(255, 0, 0)">Cache Optimisation</li>
-                            <li style="color:rgb(255, 0, 0)">Hardware Multithreading</li>
-                            <li style="color:rgb(255, 0, 0)">System Protection and Security</li>
+                            <li style="color:green">Block Replacement & Write Strategy</li>
+                            <li style="color: green">Cache Optimisation</li>
+                            <li style="color:green">Hardware Multithreading</li>
+                            <li style="color:green">System Protection and Security</li>
                         </ul>
                     </div>
                     <div class="principles">
@@ -792,8 +792,381 @@
                             A <b>look-through cache</b> will first check the cache when the processor requests data from memory. On a cache hit, the data will be loaded from cache, on a miss the cache will be loaded from memory first, then the processor will be loaded from the cache.
                         </p>
                         <h3>Write Strategy</h3>
-                    </div>
+                        <p>
+                            Write hits: write through vs write back
+                            <br>
+                            Write miss: write allocate vs no-write allocate 
 
+                        </p>
+                        <h4>Write Through vs Back</h4>
+                        <p>
+                            <b>Write through</b> is where the information is written both the block in the cache and to the main memory. Read misses do not need to write back evicted line misses.
+                            <b>Write back</b> is where the information is written only to the block in the cache. The modified cache block is written to main memory only when it is replaced. Here we need to maintain whether the block is 'clean' or 'dirty' (modified). 
+                        </p>
+                        <h4>Write allocate vs no-write allocate</h4>
+                        <p>
+                            <b>Write allocate</b> is where the block is loaded into the cache on a write miss. This is used along with write-back caches. 
+                            <br>
+                            <b>No-write Allocate</b> is where the block is modified in the main memory but not the cache, which is used along with write through caches.
+                        </p>
+                        <p>
+                            The following flowcharts show the processes of write-back with write allocate vs write-through with no-write allocate:
+                        </p>
+                        <img src="images/degree-pictures/write-back-vs-write-through.PNG">
+                        <h3>Types of cache misses</h3>
+                        <p>
+                            There are three types of cache misses:
+                            <ul>
+                                <li>Compulsory: a compulsory cache miss is when you give an address for the very first time and it is not found. This will happen even in an infinite cache.</li>
+                                <li>Capacity: a capacity miss is when the cache cannot contain all the blocks needed for an operation.</li>
+                                <li>Conflict: a conflict miss is if too many blocks map to the same set, and only occurs in associative or direct mapped cahces.</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="cache-optimization">
+                        <h2>Cache Optimization</h2>
+                        <h3>Accessing the CPU</h3>
+                        <p>
+                            <b>Hit time</b> is the time it takes to access the cache and return it to the processor. The <b>miss rate</b> is the fraction of cache accesses that result in a miss. The <b>miss penalty</b>
+                            is the number of <em>additional</em> cycles required upon encountering a miss to fetch a block from the next level of memory hierarchy. 
+                        </p>
+                        <p>
+                            Therefore the average memory access time is: 
+                            <br>
+                            <b>Hit time + (Miss rate * Miss penalty)</b>
+                            
+                        </p>
+                        <p>
+                            To optimize, we can look to reduce all three of these factors.
+                        </p>
+                        <h3>Larger Block Size</h3>
+                        <p>
+                            We can use a larger block size to reduce the miss rate. Advantages:
+                            <ul>
+                                <li>Utilises space locality</li>
+                                <li>Reduces compulsory misses</li>
+                            </ul>
+                            Disadvantages:
+                            <ul>
+                                <li>Increases the <b>miss penalty></b></li>
+                                <li>Takes longer to fetch blocks to the cache</li>
+                                <li>Increases <b>conflict misses</b></li>
+                                <li>More blocks will be mapped to the same location.</li>
+                                <li>May bring useless data and evict useful data (data pollution)</li>
+                            </ul>
+
+                        </p>
+                        <h3>Large Caches</h3>
+                        <p>
+                            We can use a larger cache to reduce the miss rate. Advantages:
+                            <ul>
+                                <li>Reduces capacity misses</li>
+                                <li>Can accomodate a larger memory footprint</li>
+                            </ul>
+                            Disadvantages:
+                            <ul>
+                                <li>Longer hit time</li>
+                                <li>Higher cost, area, and power</li>
+                            </ul>
+                        </p>
+                        <h3>Higher Associativity</h3>
+                        <p>
+                            A higher associativty will reduce the miss rate. Fully associative caches are best, but have a high hit time. Therefore we can increase associativity to some optimal level.
+                            Advantages:
+                            <ul>
+                                <li>Reduces conflict misses</li>
+                                <li>Reduces miss rate and eviction rate</li>
+                            </ul>
+                            Disadvantages:
+                            <ul>
+                                <li>Hit time increases</li>
+                                <li>More complex design than direct mapped</li>
+                                <li>More time to search in the set (tag comparison time)</li>
+                            </ul>
+                        </p>
+                        <h3>Multilevel Caches</h3>
+                        <p>
+                            We can use multilevel caches to reduce the miss penalty. Caches need to be faster and larger all the time to keep up with processor speed and memory size. We can add another level of cache 
+                            between the cache and memory. The first-level (L1) cache can be small enough to match the clock cycle of the fast processor (<b>keep a low hit time</b>). The second-level (L2) cache can be large enough to capture many 
+                            accesses that would go to main memory, thereby lessening the effective miss penalty (<b>lessen miss rate</b>). 
+                        </p>
+                        <p>
+                            Multilevel caches will reduce miss penalty. There are two types of miss rates: 
+                            <ul>
+                                <li>Local miss rate: number of misses in a cache level divided by number of memory accesses to this level</li>
+                                <li>Global miss rate: number of misses in a cache level divided by number of memory access generated by the CPU</li>
+                            </ul>
+                        </p>
+                        <p>
+                            There can also be exclusive and inclusive caches. For two caches L1 and L2, anything in the L1 cache will also be in L2 (a subset). In mutually exclusive caches this will not be the case. This will have 
+                            implications on cache size   
+                        </p>
+                        <h3>Prioritising read misses over write misses</h3>
+                        <p>
+                            If we prioritise read misses we can reduce the miss penalty. If a read miss has to evict a dirty memory block, the normal sequence is to write the dirty block to memory and read the missed block. Instead, we can copy 
+                            the dirty block to a buffer, read from memory, then write the block. It reduces the CPU's waiting time on a read miss. 
+                        </p>
+                        <h3>Advanced Optimization Techniques</h3>
+                        <h3>Way prediction</h3>
+                        <p>
+                            We can predict the way in a set to reduce hit time (i.e. predict which block in the set is to be accessed). This is done through a pre-set multiplexer. Extra bits are set to predict the block 
+                            within the set. Essentially, it is remembering the MRU way of a particular set. 
+                        </p>
+                        <h3>Victim Caches</h3>
+                        <p>
+                            We can introduce victim caches to reduce the miss-penalty. It is an additional storage near L1 for the most recently evicted blocks. It is efficient for stopping thrashing problems, as we can look up victim caches 
+                            before going to L2. The L1 and the victim cache are exclusive. 
+                        </p>
+                        <h3>Pipelining the cache</h3>
+                        <p>
+                            We can use a pipelined cache for a faster clock cycle time. To do this, we need to split the cache memory access into a number of sub-stages such as indexing, tag read, hit/miss check, and data transfer. 
+                            A pipelined cache is slower in hits and increases branch misprediction penalty. However, it does make it easier to increase associativity. 
+                        </p>
+                        <h3>Multi-banked caches</h3>
+                        <p>
+                            Multi-banked caches will increase cache bandwidth. Instead of having a single monolithic block, we can divide the cache into independent banks that can support simulataneous access.
+                            Uses something called sequential interleaving. Banks are organised into locations that are close together, and essentially means that pre-processing can be done on accessing nearby locations 
+                            for when they need to be accessed.
+                        </p>
+                        <h3>Hardware Prefetching</h3>
+                        <p>
+                            Reduces both miss rate and miss penalty. Because of spatial locality, there is a high probability that adjacent memory addreses will be in demand. Therefore we can prefetch these, for example, 
+                            by fetching more blocks on a miss. 
+                        </p>
+                    </div>
+                    <div class = "hardware-multithreading">
+                        <h2>Hardware Multithreading</h2>
+                        <h3>Thread Libararies</h3>
+                        <p>
+                            A thread library provides an API to the programmer so they can create and manage threads. These can be implemented in two ways:
+                            <ul>
+                                <li>
+                                    A user space library with no kernel support: all code and data structures for the library exist in user space. Therefore a function call here invokes a local function call 
+                                    in user space, and not a system call.
+                                </li>
+                                <li>
+                                    Kernel-level library supported directly by the OS: here, code and data structures exist in kernel space. Invoking a function to the API here results in a system call to the kernel.
+                                </li>
+                            </ul>
+                        </p>
+                        <p>
+                            There are a number of different thread libraries such as POSIX, Win32 and Java threads. 
+                        </p>
+                        <p>
+                            A hybrid thread model is where there can be multiple ways of mapping user threads to kernel threads. Many-to-many thread mapping can coexist with a binding of a user thread to a kernel thread. 
+                            Also called a two-level model. 
+                        </p>
+                        <h3>Scheduler Activation</h3>
+                        <p>
+                            In order to communicate between user level and kernel level threads, there is something called 'scheduler activation'. To do this, a data structure known as a 
+                            <b>lightweight process</b> (LWP) is used. To the user thread-library, it appears to be a virtual processor. 
+                        </p>
+                        <p>
+                            Each LWP is attached to a kernel thread, and it is kernel threads that the operating system schedules to run on physical processors. If a kernel thread blocks (such as while waiting for an I/O
+                            operation to complete) the LWP blocks as well. The user-level thread up the chain will also block. The kernel must therefore inform an application about certain events. This is called an 
+                            <b>upcall</b>. Upcalls are handled by the thread library with an <b>upcall handler</b>. And upcall handlers must run on a virtual processor.
+                        </p>
+                        <p>
+                            In Linux, we have the option to use a 'clone()' system call instead of fork() that allows the programmer to select how much data the parent should share with the child.
+                        </p>
+                        <h3>Thread Scheduler</h3>
+                        <p>
+                            The thread scheduler is a software component that manages the computing units in the system. A system will have a number of components (caches, cores, RAM) - some of which are shared.
+
+                        </p>
+                        <h4>Cores</h4>
+                        <p>
+                            Cores are a hardware thread and the smallest computing unit found in the processor chip. It executes the instructions of a single thread of execution at a time. The <b>thread scheduler</b>
+                            manages this resource, and allocates it to software threads for periods of time. A core is usually composed of a set of registers and computing units. The registers store data used by the 
+                            running thread, as well as metadata used to manage the thread (such as its instruction/stack pointers).
+
+                        </p>
+                        <p>
+                            The computing units perform various operations such as arithmetic operations (ALU), floating point operations (FPU), or address calculations (address generation unit: AGU).
+                        </p>
+                        <h4>Chip level multiprocessing</h4>
+                        <p>
+                            Chip level multiprocessing (CMP) implements thread-level parallelism by integrating multiple cores into a single chip. Each core is identical and can therefore execute a different thread 
+                            independently. With CMP, the scheduler can now choose to run multiple threads at the same time. 
+                        </p>
+                        <h4>Simulataneous multithreading architecture</h4>
+                        <p>
+                            Not all computing units were used at the same time in early computing, leading to a waste of resources. To solve this, <b>simultaneous multithreading architecture (SMT)</b> was introduced. The idea 
+                            is to run multiple threads on the same physical core by duplicating part of the hardware; mainly registers. These duplicates are called logical cores. 
+                        </p>
+                        <img src="images/degree-pictures/smt.PNG">
+                        <h3>Thread Scheduling</h3>
+                        <h4>Finegrained Multithreading</h4>
+                        <p>
+                            The motivation here is to switch to another thread every cycle such that no two instructions from the thread are in the pipeline concurrently. This improves pipeline utilization by 
+                            taking advantage of multiple threads. 
+                        </p>
+                        <img src="images/degree-pictures/fine-grained-multithreading.PNG">
+                        <p>
+                            In the image, a-c show three threads with their associated stalls. In d, there is fine-grained multithreading (assuming a three-stage pipeline). Each slot is a clock cycle. In d, the threads will run 
+                            faster overall as the stalls are mitigated by the different threads - i.e. less time is wasted.
+                        </p>
+                        <p>
+                            As we know, there are 5 pipeline stages in a RISC processor. Each stage is executed by its own dedicated CPU functional unit and each takes one clock cyle to execute. 
+                        </p>
+                        <img src="images/degree-pictures/RISC-fine-grain.PNG">
+                        <p>
+                            As shown, there are never two instructions of the same thread concurrently in the pipeline. 
+                        </p>
+                        <p>
+                            With fine-grained multithreading in a pipelined archtiecture, if the pipeline has k stages, there are at least k threads to be executed, and the CPU can execute a thread switch at each clock cycle then 
+                            there can never be more than a single instruction per thread in the pipeline at any instant, so there cannot be hazards due to dependencies and the pipeline never stalls.
+                        </p>
+                        <p>
+                            Fine-grained multithreading requires efficient context-switching among threads, and slows down a thread even if it could go on because it is not causing a stall. Furthermore, there may be 
+                            fewer threads than there are stages in the pipeline (usually the case) so keeping the CPU busy is harder. 
+                        </p>
+                        <h4>Coarse-grained multithreading</h4>
+                        <p>
+                            A hardware thread executes on a core until a long latency event (stall) occurs. The core then switches to another hardware thread on a stall. The cost of switching is high since the instruction pipeline 
+                            must be flushed before the other thread can begin execution on the processing core. Once this new thread begins execution, it begins filling the pipeline up with instructrions.
+                        </p>
+                        <img src="images/degree-pictures/coarse-grained-threading.PNG">
+                        <p>
+                            Here, e is the coarse-grained multithreading.
+                        </p>
+                        <h4>Simulataneous Multithreading</h4>
+                        <p>
+                            Here, the idea is to exploit instruction and thread parallelism at the same time. Here, instructions of the same thread can use the same stages of the pipeline. 
+                        </p>
+                        <img src="images/degree-pictures/simulteanous-multithreading.PNG">
+                        <p>
+                            This is called 2-way simultaenous multithreading, as we are doing it on two logical cores. 
+                        </p>
+                        <p>
+                            Superscalar computers are those that execute several instructions concurrently during 
+                            a clock cycle. They must use an intelligent method of instruction retrieving and delegation, or lots of stalls may occur. 
+                        </p>
+                        <img src="images/degree-pictures/multithreading.PNG">
+                    </div>
+                    <div class ="system-protection">
+                        <h2>System Protection and Security</h2>
+                        <p>
+                            A system is secure if all of its resources are used and accessed as intended under all circumstances (this is practically unachievable). Intruders attempt to breach security. A <b>threat</b> is a 
+                            potential security violation and an <b>attack</b> is an attempt to breach security. Attacks can be accidental or malicious. It easier to protect against accidental attacks.
+                        </p>
+                        <p>
+                            There are a number of types of security violations: 
+                            <ul>
+                                <li>Breach of confidentiality: unauthorised reading of data</li>
+                                <li>Breach of integrity: unauthorised modification of data</li>
+                                <li>Breach of availability: unauthorised destruction of data</li>
+                                <li>Theft of service: unauthorised use of resources</li>
+                                <li>Denial of service (DOS): prevention of legitimate use</li>
+                            </ul>
+                        </p>
+                        <p>
+                            There are also a number of security violation methods:
+                            <ul>
+                                <li>Masquerading: pretending to be an authorised user to escalate privileges</li>
+                                <li>Replay attack: modifying messages by intercepting e.g. car opening</li>
+                                <li>Man-in-the-middle attack: intruder sits in the data flow, masquerading as the reciever to the sender and the sender to the reciever</li>
+                                <li>Session hijacking: intercepting an already-established session to bypass authentication</li>
+                                <li>Privilege escalation: common attack type to access beyond what a user or resource is supposed to have</li>
+                            </ul>
+                        </p>
+                        <h3>Security levels</h3>
+                        <p>
+                            Security must occur at four levels to be effective: 
+                            <ul>
+                                <li>Physical: data centers, severs, connected terminals</li>
+                                <li>Application: benign or malicious apps can cause security concerns</li>
+                                <li>Operating System: protection mechanisms, debugging</li>
+                                <li>Network: intercepted communications, interruptions, denial of service (DoS)</li>
+                            </ul>
+                            Security is as weak as the weakest link in the chain. Humans are a risk too via phishing and social-engineering attacks. Below shows the different types of attacks and their prevention methods:
+                        </p>
+                        <img src="images/degree-pictures/system-attacks.PNG">
+                        <h3>User Authentication</h3>
+                        <p>
+                            Authentication refers to identifying each user of the system and associating the executing programs with that user. It is the responsibility of the OS to create a protection system which ensures that a user running a particular 
+                            program is authentic. OSs generally identify users in the following three ways:
+                            <ol>
+                                <li>Username/Password</li>
+                                <li>Cryptograpy keys</li>
+                                <li>Biometric authentication (e.g. fingerprint)</li>
+                            </ol>
+                            Some use a combination of the three. It is very important to correctly identify users, as user protection depends on user ID. Passwords must be kept secret, and can be encrypted, or only used once. 
+
+                        </p>
+                        <p>
+                            Passwords are generally encrypted to avoid having to keep them secret, but should be kept secret anyway. One time passwords can also be used through a hardware device or key fob. The device frequently generates new passwords 
+                            along with the computer. 
+                        </p>
+                        <h3>Goal of Protection</h3>
+                        <p>
+                            In one protection model, the computer consists of a collection of objects; hardware or software. Each object has a unique name and can be accessed through a well-defined set of operations. There is a protection problem: 
+                            we must ensure that each object is accessed correctly and only by those processes that are allowed to do so.
+                        </p>
+                        <p>
+                            The guiding principle is <b> the principle of least privilege</b>. Programs, users, and systems should be given just enough privileges to complete their task.  This can limit damages if entity has a bug or gets exploited. Privileges 
+                            can be static or dynamic (through domain switching or privilege escalation). Compartmentalizaing is a derivative concept that is about protecting each individual system componenet through the use of 
+                            specific permissions and access restrictions.
+                        </p>
+                        <p>
+                            Privileges can be given in large chunks (rough-grain) which makes management easier and simpler. Fine-grained management is more complex with more overhead but more protective. 
+                        </p>
+                        <p>
+                            An audit trail is the recording of all protection-oriented activities and is important to understanding what happened and why.
+                        </p>
+                        <p>
+                            No single principle is 'remedy for all', defense is needed in depth.
+                        </p>
+                        <h3>Protection Rings</h3>
+                        <p>
+                            Components are ordered by the amount of privilege they have and are protected from each other. For example, the kernel is in one ring, and user applications in another. This privilege separation requires 
+                            hardware support. Intel architecture uses 4 protection rings, placing kernel mode code in ring 0 and user mode code in ring 3.
+                        </p>
+                        <h3>Domain of protection</h3>
+                        <p>
+                            Rings of protection seperate function into domains and order them hierarchically. A computer can be treated as processes and objects. Hardware objects (such as devices) and software objects (such as files, programs and semaphores). 
+                            Processes, for example, should only have access to objects it currently requires to complete its task - the need-to-know principle. 
+                        </p>
+                        <p>
+                            A process may therefore operate within a protection domain, that specifies which resources the process may access. Each domain defines a set of objects and functions that may be invoked on each 
+                            object. The ability to execute an operation an operation on an object is called an <b>access right</b>. A domain is a collection of access rights, each of which is an ordered pair:
+                            <br>
+                            <b>(object - name, rights - set)</b>
+                            <br>
+                            For example, if object D has the access right (file F, read, write), then a process executing in domain D can both read and write file F. It can not, however, perform any other operation on that object. The 
+                            association between a process and a domain may be either static or dynamic.
+                        </p>
+                        <p>
+                            The image below shows three protection domains. Domain D2 and D3 both share print access on object O4.
+                        </p>
+                        <img src="images/degree-pictures/protection-domain.PNG">
+                        <h3>Domain Structure</h3>
+                        <p>
+                            A domain may be realised in a variety of ways:
+                            <ul>
+                                <li>Each user may be a domain. In this case, the set of objects that can be accessed depends on the identity of the user. Domain switching occurs when the user is changed e.g. a log out and a log in of another user.</li>
+                                <li>
+                                    Each process may be a domain. In this case, the set of objects that can be accessed depends on the identity of the process. Domain switching occurs when one process sends a message 
+                                    to another process and then waits for a response.
+                                </li>
+                                <li>
+                                    Each procedure may be a domain. In this case, the set of objects that can be accessed corresponds to the local variables defined within the procedure. Domain switching occurs when a procedure 
+                                    call is made. 
+                                </li>
+                            </ul>
+                        </p>
+                        <p>
+                            In Linux, the domain is the user ID. Domain switching can be accomplished via the file system, passwords (temporarily) or commands. 
+                        </p>
+                        <p>
+                            We can also visualise domain access as an <b>access matrix</b>. Each row is a domain, and each column is an object. Access(i,j) is the set of operations that a process operating in Domain i can perform on object j.
+                        </p>
+                        <img src="images/degree-pictures/access-matrix.PNG">
+                        <p>
+                            Privileges and programs can be asigned to roles, where users are in turn assigned to roles, or can temporarily take them based on passwords.
+                        </p>
+                    </div>
+                    
             </div>
 
         </div>
