@@ -451,7 +451,32 @@
                         <h2 id="sync">
                             Synchronisation
                         </h2>
-                        Synchronisation is...
+                        <h3>Mutex Locks</h3>
+                        <p>
+                            A mutex lock, or <b>mut</b>ual exclusion<b> lock</b>, is an object that is owned by one thread at a time. Once a thread is finished with a mutex, the thread will release it. To enter a critical section of code, the mutex must 
+                            be owned by a thread. Thread-1 will Lock(mutex), do something with the unlocked resources, then Unlock(mutex). This allows Thread-2 to access the critical section. If thread 2 tries to access the shared resources (by accessing the mutex
+                            object), an error will be returned.  
+                        </p>
+                        <h3>Semaphores</h3>
+                        <p>
+                            If we have multiple shared resources, then it makes sense to use the more powerful semaphore. A semaphore is a varaible that has a maximum value, and once reached, no more users can access the shared resource. To request access, the semaphore 
+                            must be decremented (and unavailable at zero), and to signal they have finished using the resource, they can increment it. Nothing 'owns' the semaphore like threads will own the mutex lock. 
+                        </p>
+                        <p>
+                            The key difference between mutex locks and semaphores is that a mutex lock is an object owned by a thread, and only allow one thread to access some resource. A semaphore is a signalling mechanism, with 
+                            no ownership, and allows multiple threads to access a resource.
+                        </p>
+
+                        <h3>Readers-Writers Problem</h3>
+                        <p>
+                            This is a classic problem in process synchronisation where there are reader and writer processes that want to access some data. Readers only read the data, but writers read and write. When reading, nothing must be written
+                            but when writing, nothing must be read either. Also, multiple readers can read the data at a time, but only one writer can write at a time. 
+                        </p>
+                        <p>
+                            Initally, a solution could involve using a binary semaphore. This will stop the writer from writing if the file is being read, and stop readers from reading if the file is being written to. However, this will only allow one reader to read 
+                            at any given time, when multiple readers could be reading at the same time. 
+                        </p>
+
                     </div>
                     <div class="deadlock">
                         <h2 id="deadlock">
