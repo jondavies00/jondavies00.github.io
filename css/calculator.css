@@ -1,0 +1,124 @@
+.heading {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    width: 20%;
+}
+
+.calc-container {
+    margin: auto;
+    background-color: rgb(196, 196, 196);
+    width: 375px;
+    height: 100%;
+    border: solid #000;
+    border-width: 3px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 15px;
+    background: #ffffff;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #494949;
+    cursor: pointer;
+  }
+
+.button-group {
+    width: 72%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 10px;
+    padding-top: 15px;
+    
+}
+
+.calc-display {
+    border: solid #000;
+    background-color: white;
+
+    border-width: 2px;
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-top: 10px;
+    width: 90%;
+    height: 50px;
+}
+
+/* Prevent super and sub scripts affecting the text */
+sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    top: -0.4em;
+  }
+  sub { 
+    top: 0.4em; 
+  }
+
+.calc-text {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    margin-top: 15px;
+    font-size: large;
+    font-weight: bold;
+}
+
+
+.number-button-wrapper {
+    display: inline-block;
+    position: relative;
+    left:0;
+}
+
+
+.operator-button-wrapper {
+    display: inline-block;
+    position: relative;
+    right: 0;
+    
+}
+
+.number-button-group {
+    /* border: 10px; */
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+    gap: 5px;
+    
+    margin-bottom: 5px;
+    grid-auto-rows: minmax(50px, auto);
+}
+
+.operator-button-group {
+    
+    display: grid;
+    grid-template-columns: 50px 50px;
+    gap: 5px;
+
+    grid-auto-rows: minmax(50px, auto);
+}
+
+
+.button-group button {
+    background-color: white;
+    font-size: large;
+}
+
+.button-group button:hover {
+    background: rgb(196, 196, 196);
+}
+
